@@ -1,12 +1,13 @@
 name: Release Plugin
 
-# 推送 tags 格式：<plugin-name>@<version>
-# git tag obsidian-attachment@v2.0.0 && git push origin obsidian-attachment@v2.0.0
-
 on:
   push:
     tags:
       - "*@*"
+
+# 给 GITHUB_TOKEN 开写权限，否则无法创建 Release
+permissions:
+  contents: write
 
 jobs:
   release:
@@ -15,7 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 通过 corepack 启用 pnpm（Node.js 内置，无需额外 action）
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -24,8 +24,6 @@ jobs:
 
       - run: pnpm install
 
-      # 从 tag 解析插件名和版本号
-      # obsidian-attachment@v2.0.0 → plugin=obsidian-attachment, version=v2.0.0
       - name: Parse tag
         id: tag
         run: |
