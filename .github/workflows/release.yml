@@ -33,6 +33,9 @@ jobs:
           echo "plugin=$PLUGIN" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: TypeCheck
+        run: pnpm -r typecheck
+
       - name: Build plugin
         run: |
           cd plugins/${{ steps.tag.outputs.plugin }}

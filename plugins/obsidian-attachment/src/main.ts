@@ -1,70 +1,105 @@
-/**
- * 插件入口 — Obsidian 加载/卸载插件时调用的生命周期方法都在这里。
- *
- * 职责：
- *  1. 加载和持久化用户设置
- *  2. 注册设置面板
- *  3. 在插件加载时猴子补丁(monkey-patch) app.saveAttachment，
- *     让所有附件的保存行为都走我们的自定义逻辑
- *  4. 插件卸载时恢复原始 saveAttachment
- */
-
 import { Plugin } from "obsidian";
 import type { AttachmentCoreSettings } from "./settings";
 import { DEFAULT_SETTINGS, AttachmentCoreSettingTab } from "./settings";
 import { createSaveAttachment } from "./attachment-handler";
+import { runCleanup, runSilentScan } from "./cleanup";
 
-// ---------------------------------------------------------------------------
-// 类型补丁 — Obsidian 内部的 saveAttachment 未在公开类型中导出，
-// 这里手动声明以便在运行时替换它。
-// ---------------------------------------------------------------------------
-
-type SaveAttachmentFn = (name: string, ext: string, data: ArrayBuffer) => Promise<unknown>;
-type AppWithSaveAttachment = Plugin["app"] & { saveAttachment: SaveAttachmentFn };
+type SaveAttachmentFn = (
+  name: string,
+  ext: string,
+  data: ArrayBuffer,
+) => Promise<unknown>;
+type AppWithSaveAttachment = Plugin["app"] & {
+  saveAttachment: SaveAttachmentFn;
+};
 
 export default class ObsidianAttachmentCorePlugin extends Plugin {
   settings!: AttachmentCoreSettings;
 
-  /** 保存原始 saveAttachment，卸载时用它恢复 */
   private originalSaveAttachment: SaveAttachmentFn | null = null;
+  /** 自动扫描的定时器 ID */
+  private autoScanTimer: ReturnType<typeof setInterval> | null = null;
 
   // =========================================================================
   // 生命周期
   // =========================================================================
 
   onload = async (): Promise<void> => {
-    // 1. 从磁盘读取用户设置 → 合并到 DEFAULT_SETTINGS
     await this.loadSettings();
 
-    // 2. 注册设置面板（Settings → Community Plugins → 齿轮图标）
+    // 设置面板
     this.addSettingTab(new AttachmentCoreSettingTab(this.app, this));
 
-    // 3. 替换 app.saveAttachment，所有拖拽/粘贴附件都会走这里
+    // 替换 saveAttachment
     const app = this.app as AppWithSaveAttachment;
     this.originalSaveAttachment = app.saveAttachment.bind(app);
     app.saveAttachment = createSaveAttachment(this);
+
+    // 手动清理命令
+    this.addCommand({
+      id: "clean-orphaned-assets",
+      name: "Clean orphaned assets",
+      callback: () => runCleanup(this),
+    });
+
+    // 启动后台静默扫描
+    this.startAutoScan();
   };
 
   onunload = (): void => {
-    // 插件卸载时把 saveAttachment 恢复原样，避免影响其他插件
+    // 恢复原始 saveAttachment
     if (this.originalSaveAttachment) {
       const app = this.app as AppWithSaveAttachment;
       app.saveAttachment = this.originalSaveAttachment;
       this.originalSaveAttachment = null;
     }
+
+    // 清除定时器
+    this.stopAutoScan();
   };
 
   // =========================================================================
   // 设置持久化
   // =========================================================================
 
-  /** 读磁盘 → 合并默认值 → 挂到 this.settings */
   loadSettings = async (): Promise<void> => {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
   };
 
-  /** 把 this.settings 写入磁盘 */
   saveSettings = async (): Promise<void> => {
     await this.saveData(this.settings);
+  };
+
+  // =========================================================================
+  // 后台自动扫描
+  // =========================================================================
+
+  /** 启动自动扫描定时器（如果用户启用了此功能） */
+  startAutoScan = (): void => {
+    this.stopAutoScan(); // 先清旧定时器，避免重复
+
+    if (!this.settings.autoCleanupEnabled) return;
+
+    const intervalMs = this.settings.autoCleanupInterval * 60 * 1000;
+
+    this.autoScanTimer = setInterval(() => {
+      runSilentScan(this);
+    }, intervalMs);
+  };
+
+  /** 停止自动扫描定时器 */
+  stopAutoScan = (): void => {
+    if (this.autoScanTimer !== null) {
+      clearInterval(this.autoScanTimer);
+      this.autoScanTimer = null;
+    }
+  };
+
+  /**
+   * 当用户在设置面板中改动相关配置时调用，
+   * 自动重启定时器使新配置生效。
+   */
+  restartAutoScan = (): void => {
+    this.startAutoScan();
   };
 }

@@ -1,11 +1,12 @@
 {
   "name": "obsidian-attachment",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "main": "main.js",
   "type": "commonjs",
   "scripts": {
-    "build": "node esbuild.config.mjs",
+    "build": "tsc --noEmit && node esbuild.config.mjs",
+    "typecheck": "tsc --noEmit",
     "dev": "node esbuild.config.mjs --watch"
   }
 }
