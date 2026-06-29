@@ -1,8 +1,7 @@
 name: Release Plugin
 
 # 推送 tags 格式：<plugin-name>@<version>
-# 例如：git tag obsidian-attachment@v2.0.0
-# 效果：构建该插件，生成 zip 并创建 GitHub Release
+# git tag obsidian-attachment@v2.0.0 && git push origin obsidian-attachment@v2.0.0
 
 on:
   push:
@@ -16,16 +15,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-
+      # 通过 corepack 启用 pnpm（Node.js 内置，无需额外 action）
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm
+
+      - run: corepack enable pnpm
 
       - run: pnpm install
 
-      # 从 tag 中解析插件名和版本号
+      # 从 tag 解析插件名和版本号
       # obsidian-attachment@v2.0.0 → plugin=obsidian-attachment, version=v2.0.0
       - name: Parse tag
         id: tag
@@ -36,19 +35,16 @@ jobs:
           echo "plugin=$PLUGIN" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      # 只构建目标插件，不构建全部
       - name: Build plugin
         run: |
           cd plugins/${{ steps.tag.outputs.plugin }}
           node esbuild.config.mjs
 
-      # 打包 dist/ 为 zip
       - name: Package release zip
         run: |
           cd plugins/${{ steps.tag.outputs.plugin }}/dist
           zip -r ../../../${{ steps.tag.outputs.plugin }}.zip .
 
-      # 创建 GitHub Release 并上传 zip
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
