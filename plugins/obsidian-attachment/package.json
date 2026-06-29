@@ -1,0 +1,11 @@
+﻿{
+  "name": "obsidian-attachment",
+  "version": "0.1.0",
+  "private": true,
+  "main": "main.js",
+  "type": "commonjs",
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "dev": "node esbuild.config.mjs --watch"
+  }
+}
