@@ -30,15 +30,20 @@ export default class ObsidianAttachmentCorePlugin extends Plugin {
     this.originalSaveAttachment = app.saveAttachment.bind(app);
     app.saveAttachment = createSaveAttachment(this);
 
-    // 手动清理命令
     this.addCommand({
       id: "clean-orphaned-assets",
       name: "Clean orphaned assets",
       callback: () => runCleanup(this),
     });
 
-    // 启动时静默清理
-    silentClean(this);
+    let startupCleaned = false;
+    this.registerEvent(
+      this.app.metadataCache.on("resolved", () => {
+        if (startupCleaned) return;
+        startupCleaned = true;
+        silentClean(this);
+      }),
+    );
   };
 
   onunload = (): void => {
