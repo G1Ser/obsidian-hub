@@ -29,3 +29,7 @@
 - `div+p` → `<div></div><p></p>` 同级兄弟
 
 用法：输入缩写后 `Ctrl+P` → **Expand Emmet abbreviation**。
+
+### obsidian-claude-pdf
+
+导出 claude 风格的 pdf

@@ -1,0 +1,22 @@
+{
+  "name": "obsidian-claude-pdf",
+  "version": "1.0.0",
+  "private": true,
+  "main": "main.js",
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc --noEmit && node esbuild.config.mjs",
+    "typecheck": "tsc --noEmit",
+    "dev": "node esbuild.config.mjs --watch",
+    "test": "tsx tests/export.ts"
+  },
+  "dependencies": {
+    "marked": "18.0.5",
+    "playwright": "1.61.1",
+    "pretext": "0.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.0.1",
+    "tsx": "4.22.4"
+  }
+}

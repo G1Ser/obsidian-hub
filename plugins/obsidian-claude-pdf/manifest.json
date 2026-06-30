@@ -1,0 +1,9 @@
+{
+  "id": "obsidian-claude-pdf",
+  "name": "Obsidian Claude PDF",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Convert Markdown to Claude Style PDF",
+  "author": "Chauncey",
+  "isDesktopOnly": false
+}
