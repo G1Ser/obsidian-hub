@@ -1,5 +1,4 @@
-import { normalizePath, type Plugin } from "obsidian";
-import type ObsidianAttachmentCorePlugin from "./main";
+import type { Plugin } from "obsidian";
 
 // =========================================================================
 // 时间戳
@@ -46,32 +45,6 @@ export const ensureFolder = async (
       await vault.createFolder(current);
     }
   }
-};
-
-// =========================================================================
-// 引用扫描
-// =========================================================================
-
-/**
- * 从 metadataCache 构建 assets 目录下所有被引用文件的路径集合。
- * trash.ts 和 cleanup.ts 共用此函数。
- */
-export const getReferencedPaths = (
-  plugin: ObsidianAttachmentCorePlugin,
-): Set<string> => {
-  const assetsRoot = normalizePath(plugin.settings.assetsRoot);
-  const referenced = new Set<string>();
-
-  const resolvedLinks = plugin.app.metadataCache.resolvedLinks;
-  for (const targets of Object.values(resolvedLinks)) {
-    for (const targetPath of Object.keys(targets)) {
-      if (targetPath.startsWith(assetsRoot)) {
-        referenced.add(normalizePath(targetPath));
-      }
-    }
-  }
-
-  return referenced;
 };
 
 // =========================================================================

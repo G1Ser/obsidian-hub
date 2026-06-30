@@ -17,12 +17,16 @@
 - **归置** — 存入 `assets/<笔记路径>/`，告别散落一地的附件
 - **压缩** — png / jpg 自动转 WebP，节省存储空间
 - **去重** — 时间戳命名 `YYYYMMDD-HHmmssSSS`，不会覆盖旧文件
+- **清理** — 后台扫描孤立的附件，移入回收站，超期自动清除
 
-**可配置项：**
+### obsidian-emmet
 
-| 设置                   | 默认值           | 说明                       |
-| ---------------------- | ---------------- | -------------------------- |
-| Assets root folder     | `assets`         | 附件存放根目录             |
-| Convert images to WebP | 开启             | 是否自动转 WebP            |
-| WebP quality           | `80`             | 编码质量 (1–100)           |
-| WebP extensions        | `png, jpg, jpeg` | 需要转换的后缀（逗号分隔） |
+在编辑器里输入缩写，一键展开为 HTML：
+
+- `div` → `<div></div>`
+- `div.container#main` → `<div class="container" id="main"></div>`
+- `div*3` → 三个 `<div></div>`
+- `div>span*2` → `<div><span></span><span></span></div>`
+- `table>tr*3>td*4` → 3 行 4 列的表格
+
+用法：输入缩写后 `Ctrl+P` → **Expand Emmet abbreviation**。

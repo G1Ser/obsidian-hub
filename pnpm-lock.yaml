@@ -20,6 +20,8 @@ importers:
 
   plugins/obsidian-attachment: {}
 
+  plugins/obsidian-emmet: {}
+
 packages:
 
   '@codemirror/state@6.5.0':

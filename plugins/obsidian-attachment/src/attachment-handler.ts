@@ -22,6 +22,7 @@ export const createSaveAttachment = (
     let finalData = data;
     const normalizedExt = normalizeExtension(ext);
 
+    // 设置了开启图片压缩
     if (settings.enableWebp) {
       const webpExts = settings.webpExtensions
         .split(",")
