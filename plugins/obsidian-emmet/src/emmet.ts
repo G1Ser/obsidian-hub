@@ -85,6 +85,8 @@ const parseElement = (raw: string): Node => {
     }
     if (s[i] === '*') {
       i++;
+      // Obsidian 有时会在 * 和数字之间插入空格，跳过
+      while (i < s.length && s[i] === ' ') i++;
       let n = '';
       while (i < s.length && /^\d$/.test(s[i])) n += s[i++];
       multiply = +n || 1;

@@ -18,6 +18,12 @@ describe('emmet parse & expand', () => {
     expect(html).toBe('<ul>\n  <li>Item</li>\n  <li>Item</li>\n  <li>Item</li>\n</ul>');
   });
 
+  it('div>p*2>span* 10 → 2 P 各含 10 span（Obsidian 空格插入）', () => {
+    const html = expand(parse('div>p*2>span* 10'));
+    const spans = (html.match(/<span>/g) || []).length;
+    expect(spans).toBe(20); // 2 P × 10 span
+  });
+
   it('div+p → <div></div><p></p> 同级兄弟', () => {
     const html = expand(parse('div+p'));
     expect(html).toBe('<div></div>\n<p></p>');

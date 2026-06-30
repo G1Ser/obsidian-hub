@@ -31,7 +31,16 @@ export default class ObsidianEmmetPlugin extends Plugin {
       }
 
       abbrev = match[1];
-      from = { line: cursor.line, ch: cursor.ch - abbrev.length };
+      from = { line: cursor.line, ch: match.index! };
+
+      // Obsidian 有时会在 * 和数字之间插入空格（如 span*10 → span* 10），
+      // 兼容easy typing插件。
+      const afterMatch = textBefore.slice(match.index! + match[0].length);
+      const trailing = afterMatch.match(/^\s*(\d+)/);
+      if (trailing) {
+        abbrev += trailing[0];
+      }
+
       to = cursor;
     }
 
