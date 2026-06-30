@@ -1,0 +1,9 @@
+{
+  "id": "obsidian-emmet",
+  "name": "Obsidian Emmet",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Emmet-like HTML abbreviation expansion in Obsidian.",
+  "author": "Chauncey",
+  "isDesktopOnly": false
+}
