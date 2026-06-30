@@ -1,18 +1,14 @@
-import { Plugin } from "obsidian";
+import { Plugin } from 'obsidian';
 import {
   type AttachmentCoreSettings,
   DEFAULT_SETTINGS,
   AttachmentCoreSettingTab,
-} from "./settings";
-import { createSaveAttachment } from "./attachment-handler";
-import { runCleanup, silentClean } from "./cleanup";
+} from './settings';
+import { createSaveAttachment } from './attachment-handler';
+import { runCleanup, silentClean } from './cleanup';
 
-type SaveAttachmentFn = (
-  name: string,
-  ext: string,
-  data: ArrayBuffer,
-) => Promise<unknown>;
-type AppWithSaveAttachment = Plugin["app"] & {
+type SaveAttachmentFn = (name: string, ext: string, data: ArrayBuffer) => Promise<unknown>;
+type AppWithSaveAttachment = Plugin['app'] & {
   saveAttachment: SaveAttachmentFn;
 };
 
@@ -31,14 +27,14 @@ export default class ObsidianAttachmentCorePlugin extends Plugin {
     app.saveAttachment = createSaveAttachment(this);
 
     this.addCommand({
-      id: "clean-orphaned-assets",
-      name: "Clean orphaned assets",
+      id: 'clean-orphaned-assets',
+      name: 'Clean orphaned assets',
       callback: () => runCleanup(this),
     });
 
     let startupCleaned = false;
     this.registerEvent(
-      this.app.metadataCache.on("resolved", () => {
+      this.app.metadataCache.on('resolved', () => {
         if (startupCleaned) return;
         startupCleaned = true;
         silentClean(this);

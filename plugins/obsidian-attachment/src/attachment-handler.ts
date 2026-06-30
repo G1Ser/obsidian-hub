@@ -1,13 +1,8 @@
-import { normalizePath, TFile } from "obsidian";
-import type ObsidianAttachmentCorePlugin from "./main";
-import {
-  formatTimestamp,
-  ensureFolder,
-  normalizeExtension,
-  convertImageToWebp,
-} from "./utils";
+import { normalizePath, TFile } from 'obsidian';
+import type ObsidianAttachmentCorePlugin from './main';
+import { formatTimestamp, ensureFolder, normalizeExtension, convertImageToWebp } from './utils';
 
-type VaultWithGetAvailablePath = import("obsidian").Plugin["app"]["vault"] & {
+type VaultWithGetAvailablePath = import('obsidian').Plugin['app']['vault'] & {
   getAvailablePath: (path: string, ext: string) => string;
 };
 
@@ -24,17 +19,12 @@ export const createSaveAttachment = (
 
     // 设置了开启图片压缩
     if (settings.enableWebp) {
-      const webpExts = settings.webpExtensions
-        .split(",")
-        .map((s) => normalizeExtension(s));
+      const webpExts = settings.webpExtensions.split(',').map(s => normalizeExtension(s));
 
       if (webpExts.includes(normalizedExt)) {
-        const webpData = await convertImageToWebp(
-          data,
-          settings.webpQuality / 100,
-        );
+        const webpData = await convertImageToWebp(data, settings.webpQuality / 100);
         if (webpData) {
-          finalExt = "webp";
+          finalExt = 'webp';
           finalData = webpData;
         }
       }
@@ -42,13 +32,11 @@ export const createSaveAttachment = (
 
     const activeFile = app.workspace.getActiveFile();
     const noteFolderPath =
-      activeFile instanceof TFile && activeFile.extension === "md"
-        ? normalizePath(activeFile.path.replace(/\.md$/i, ""))
-        : "unknown";
+      activeFile instanceof TFile && activeFile.extension === 'md'
+        ? normalizePath(activeFile.path.replace(/\.md$/i, ''))
+        : 'unknown';
 
-    const targetFolder = normalizePath(
-      `${settings.assetsRoot}/${noteFolderPath}`,
-    );
+    const targetFolder = normalizePath(`${settings.assetsRoot}/${noteFolderPath}`);
     await ensureFolder(app.vault, targetFolder);
 
     const timestamp = formatTimestamp(new Date());

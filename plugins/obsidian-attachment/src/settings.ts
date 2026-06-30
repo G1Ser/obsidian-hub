@@ -1,5 +1,5 @@
-import { App, PluginSettingTab, Setting } from "obsidian";
-import type ObsidianAttachmentCorePlugin from "./main";
+import { App, PluginSettingTab, Setting } from 'obsidian';
+import type ObsidianAttachmentCorePlugin from './main';
 
 export interface AttachmentCoreSettings {
   assetsRoot: string;
@@ -9,10 +9,10 @@ export interface AttachmentCoreSettings {
 }
 
 export const DEFAULT_SETTINGS: AttachmentCoreSettings = {
-  assetsRoot: "Assets",
+  assetsRoot: 'Assets',
   enableWebp: true,
   webpQuality: 80,
-  webpExtensions: "png, jpg, jpeg",
+  webpExtensions: 'png, jpg, jpeg',
 };
 
 export class AttachmentCoreSettingTab extends PluginSettingTab {
@@ -27,64 +27,54 @@ export class AttachmentCoreSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl("h2", { text: "Attachment Core Settings" });
+    containerEl.createEl('h2', { text: 'Attachment Core Settings' });
 
     new Setting(containerEl)
-      .setName("Assets root folder")
-      .setDesc("Attachments are saved under this root folder in your vault.")
-      .addText((text) => {
+      .setName('Assets root folder')
+      .setDesc('Attachments are saved under this root folder in your vault.')
+      .addText(text => {
         text
           .setPlaceholder(DEFAULT_SETTINGS.assetsRoot)
           .setValue(this.plugin.settings.assetsRoot)
-          .onChange(async (value) => {
-            this.plugin.settings.assetsRoot =
-              value.trim() || DEFAULT_SETTINGS.assetsRoot;
+          .onChange(async value => {
+            this.plugin.settings.assetsRoot = value.trim() || DEFAULT_SETTINGS.assetsRoot;
             await this.plugin.saveSettings();
           });
       });
 
     new Setting(containerEl)
-      .setName("Convert images to WebP")
-      .setDesc(
-        "Automatically convert PNG/JPEG images to WebP format to reduce file size.",
-      )
-      .addToggle((toggle) => {
-        toggle
-          .setValue(this.plugin.settings.enableWebp)
-          .onChange(async (value) => {
-            this.plugin.settings.enableWebp = value;
-            await this.plugin.saveSettings();
-          });
+      .setName('Convert images to WebP')
+      .setDesc('Automatically convert PNG/JPEG images to WebP format to reduce file size.')
+      .addToggle(toggle => {
+        toggle.setValue(this.plugin.settings.enableWebp).onChange(async value => {
+          this.plugin.settings.enableWebp = value;
+          await this.plugin.saveSettings();
+        });
       });
 
     new Setting(containerEl)
-      .setName("WebP quality")
-      .setDesc(
-        "Quality level for WebP conversion (1–100). Higher = better quality, larger file.",
-      )
-      .addSlider((slider) => {
+      .setName('WebP quality')
+      .setDesc('Quality level for WebP conversion (1–100). Higher = better quality, larger file.')
+      .addSlider(slider => {
         slider
           .setLimits(1, 100, 1)
           .setValue(this.plugin.settings.webpQuality)
           .setDynamicTooltip()
-          .onChange(async (value) => {
+          .onChange(async value => {
             this.plugin.settings.webpQuality = value;
             await this.plugin.saveSettings();
           });
       });
 
     new Setting(containerEl)
-      .setName("WebP image extensions")
-      .setDesc(
-        "Comma-separated list of extensions to convert (e.g. png, jpg, jpeg, bmp).",
-      )
-      .addText((text) => {
+      .setName('WebP image extensions')
+      .setDesc('Comma-separated list of extensions to convert (e.g. png, jpg, jpeg, bmp).')
+      .addText(text => {
         text
           .setPlaceholder(DEFAULT_SETTINGS.webpExtensions)
           .setValue(this.plugin.settings.webpExtensions)
-          .onChange(async (value) => {
-            this.plugin.settings.webpExtensions =
-              value.trim() || DEFAULT_SETTINGS.webpExtensions;
+          .onChange(async value => {
+            this.plugin.settings.webpExtensions = value.trim() || DEFAULT_SETTINGS.webpExtensions;
             await this.plugin.saveSettings();
           });
       });

@@ -1,13 +1,11 @@
-import { Modal, Notice, TFile, normalizePath } from "obsidian";
-import type ObsidianAttachmentCorePlugin from "./main";
+import { Modal, Notice, TFile, normalizePath } from 'obsidian';
+import type ObsidianAttachmentCorePlugin from './main';
 
 // ---------------------------------------------------------------------------
 // 扫描
 // ---------------------------------------------------------------------------
 
-const getReferencedPaths = (
-  plugin: ObsidianAttachmentCorePlugin,
-): Set<string> => {
+const getReferencedPaths = (plugin: ObsidianAttachmentCorePlugin): Set<string> => {
   const assetsRoot = normalizePath(plugin.settings.assetsRoot);
   const referenced = new Set<string>();
 
@@ -56,9 +54,7 @@ export const findOrphanedAssets = async (
 // 批量删除（静默，用于启动时）
 // ---------------------------------------------------------------------------
 
-export const silentClean = async (
-  plugin: ObsidianAttachmentCorePlugin,
-): Promise<number> => {
+export const silentClean = async (plugin: ObsidianAttachmentCorePlugin): Promise<number> => {
   const orphans = await findOrphanedAssets(plugin);
   if (orphans.length === 0) return 0;
 
@@ -89,7 +85,7 @@ class CleanupModal extends Modal {
   private plugin: ObsidianAttachmentCorePlugin;
 
   constructor(
-    app: import("obsidian").App,
+    app: import('obsidian').App,
     plugin: ObsidianAttachmentCorePlugin,
     orphans: string[],
   ) {
@@ -102,45 +98,45 @@ class CleanupModal extends Modal {
     const { contentEl } = this;
     contentEl.empty();
 
-    contentEl.createEl("h2", {
+    contentEl.createEl('h2', {
       text: `Found ${this.orphans.length} orphaned asset(s)`,
     });
 
     const listContainer = contentEl.createDiv({
-      cls: "attachment-cleanup-list",
+      cls: 'attachment-cleanup-list',
     });
-    listContainer.style.maxHeight = "300px";
-    listContainer.style.overflowY = "auto";
-    listContainer.style.marginBottom = "1em";
+    listContainer.style.maxHeight = '300px';
+    listContainer.style.overflowY = 'auto';
+    listContainer.style.marginBottom = '1em';
 
     for (const path of this.orphans) {
-      const row = listContainer.createDiv({ cls: "attachment-cleanup-row" });
-      row.style.padding = "2px 0";
-      row.style.fontSize = "0.9em";
+      const row = listContainer.createDiv({ cls: 'attachment-cleanup-row' });
+      row.style.padding = '2px 0';
+      row.style.fontSize = '0.9em';
       row.createSpan({ text: path });
     }
 
-    const warning = contentEl.createEl("p", {
-      text: "⚠️ These files will be moved to system trash. Ctrl+Z in the editor cannot undo this action.",
+    const warning = contentEl.createEl('p', {
+      text: '⚠️ These files will be moved to system trash. Ctrl+Z in the editor cannot undo this action.',
     });
-    warning.style.color = "var(--text-warning)";
-    warning.style.fontSize = "0.85em";
+    warning.style.color = 'var(--text-warning)';
+    warning.style.fontSize = '0.85em';
 
     const buttonRow = contentEl.createDiv({
-      cls: "attachment-cleanup-buttons",
+      cls: 'attachment-cleanup-buttons',
     });
-    buttonRow.style.display = "flex";
-    buttonRow.style.gap = "0.5em";
-    buttonRow.style.marginTop = "1em";
+    buttonRow.style.display = 'flex';
+    buttonRow.style.gap = '0.5em';
+    buttonRow.style.marginTop = '1em';
 
-    const cancelBtn = buttonRow.createEl("button", { text: "Cancel" });
-    cancelBtn.addEventListener("click", () => this.close());
+    const cancelBtn = buttonRow.createEl('button', { text: 'Cancel' });
+    cancelBtn.addEventListener('click', () => this.close());
 
-    const confirmBtn = buttonRow.createEl("button", {
-      text: "Move to Trash",
-      cls: "mod-cta",
+    const confirmBtn = buttonRow.createEl('button', {
+      text: 'Move to Trash',
+      cls: 'mod-cta',
     });
-    confirmBtn.addEventListener("click", () => this.executeCleanup());
+    confirmBtn.addEventListener('click', () => this.executeCleanup());
   };
 
   onClose = (): void => {
@@ -159,13 +155,11 @@ class CleanupModal extends Modal {
 // 对外入口
 // ---------------------------------------------------------------------------
 
-export const runCleanup = async (
-  plugin: ObsidianAttachmentCorePlugin,
-): Promise<void> => {
+export const runCleanup = async (plugin: ObsidianAttachmentCorePlugin): Promise<void> => {
   const orphans = await findOrphanedAssets(plugin);
 
   if (orphans.length === 0) {
-    new Notice("No orphaned assets found.");
+    new Notice('No orphaned assets found.');
     return;
   }
 

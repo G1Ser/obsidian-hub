@@ -3,7 +3,7 @@ name: Release Plugin
 on:
   push:
     tags:
-      - "*@*"
+      - '*@*'
 
 # 给 GITHUB_TOKEN 开写权限，否则无法创建 Release
 permissions:
@@ -49,5 +49,5 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "${{ steps.tag.outputs.plugin }} ${{ steps.tag.outputs.version }}"
+          name: '${{ steps.tag.outputs.plugin }} ${{ steps.tag.outputs.version }}'
           files: ${{ steps.tag.outputs.plugin }}.zip

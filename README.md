@@ -23,10 +23,9 @@
 
 在编辑器里输入缩写，一键展开为 HTML：
 
-- `div` → `<div></div>`
-- `div.container#main` → `<div class="container" id="main"></div>`
-- `div*3` → 三个 `<div></div>`
 - `div>span*2` → `<div><span></span><span></span></div>`
 - `table>tr*3>td*4` → 3 行 4 列的表格
+- `ul>li*3{Item}` → 3 个带文本的 `<li>`
+- `div+p` → `<div></div><p></p>` 同级兄弟
 
 用法：输入缩写后 `Ctrl+P` → **Expand Emmet abbreviation**。

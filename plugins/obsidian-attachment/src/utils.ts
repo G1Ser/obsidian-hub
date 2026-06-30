@@ -1,21 +1,21 @@
-import type { Plugin } from "obsidian";
+import type { Plugin } from 'obsidian';
 
 // =========================================================================
 // 时间戳
 // =========================================================================
 export const formatTimestamp = (date: Date): string => {
-  const pad = (n: number, width = 2): string => String(n).padStart(width, "0");
+  const pad = (n: number, width = 2): string => String(n).padStart(width, '0');
 
   return [
     date.getFullYear(),
     pad(date.getMonth() + 1),
     pad(date.getDate()),
-    "-",
+    '-',
     pad(date.getHours()),
     pad(date.getMinutes()),
     pad(date.getSeconds()),
     pad(date.getMilliseconds(), 3),
-  ].join("");
+  ].join('');
 };
 
 // =========================================================================
@@ -29,15 +29,15 @@ export const formatTimestamp = (date: Date): string => {
  * @param folderPath - 相对于 vault 根的目录路径，如 "assets/notes/sub"
  */
 export const ensureFolder = async (
-  vault: Plugin["app"]["vault"],
+  vault: Plugin['app']['vault'],
   folderPath: string,
 ): Promise<void> => {
   // 快路径：已存在就返回
   if (await vault.adapter.exists(folderPath)) return;
 
   // 慢路径：逐层检查并创建
-  const parts = folderPath.split("/").filter(Boolean);
-  let current = "";
+  const parts = folderPath.split('/').filter(Boolean);
+  let current = '';
 
   for (const part of parts) {
     current = current ? `${current}/${part}` : part;
@@ -51,7 +51,7 @@ export const ensureFolder = async (
 // 后缀处理
 // =========================================================================
 export const normalizeExtension = (ext: string): string =>
-  ext.trim().toLowerCase().replace(/^\./, "");
+  ext.trim().toLowerCase().replace(/^\./, '');
 
 // =========================================================================
 // 图片转换
@@ -72,11 +72,11 @@ export const convertImageToWebp = async (
     const blob = new Blob([data]);
     const bitmap = await createImageBitmap(blob);
 
-    const canvas = document.createElement("canvas");
+    const canvas = document.createElement('canvas');
     canvas.width = bitmap.width;
     canvas.height = bitmap.height;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) {
       bitmap.close();
       return null;
@@ -85,8 +85,8 @@ export const convertImageToWebp = async (
     ctx.drawImage(bitmap, 0, 0);
     bitmap.close();
 
-    const webpBlob = await new Promise<Blob | null>((resolve) => {
-      canvas.toBlob((result) => resolve(result), "image/webp", quality);
+    const webpBlob = await new Promise<Blob | null>(resolve => {
+      canvas.toBlob(result => resolve(result), 'image/webp', quality);
     });
 
     if (!webpBlob) return null;

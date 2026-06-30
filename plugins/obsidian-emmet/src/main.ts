@@ -1,13 +1,13 @@
-import { Plugin, Editor, Notice } from "obsidian";
-import { parse, expand } from "./emmet";
+import { Plugin, Editor, Notice } from 'obsidian';
+import { parse, expand } from './emmet';
 
-const ABBREV_RE = /([a-z][\w.#*>{}\[\]+\-]+)$/i;
+const ABBREV_RE = /([a-z][\w*>{}+\-]+)$/i;
 
 export default class ObsidianEmmetPlugin extends Plugin {
   onload = (): void => {
     this.addCommand({
-      id: "expand-abbreviation",
-      name: "Expand Emmet abbreviation",
+      id: 'expand-abbreviation',
+      name: 'Expand Emmet abbreviation',
       editorCallback: (editor: Editor) => this.expandAtCursor(editor),
     });
   };
@@ -15,8 +15,8 @@ export default class ObsidianEmmetPlugin extends Plugin {
   private expandAtCursor = (editor: Editor): void => {
     const selection = editor.getSelection();
     let abbrev: string;
-    let from = editor.getCursor("from");
-    let to = editor.getCursor("to");
+    let from = editor.getCursor('from');
+    let to = editor.getCursor('to');
 
     if (selection) {
       abbrev = selection.trim();
@@ -26,7 +26,7 @@ export default class ObsidianEmmetPlugin extends Plugin {
       const textBefore = line.slice(0, cursor.ch);
       const match = textBefore.match(ABBREV_RE);
       if (!match) {
-        new Notice("No Emmet abbreviation found before cursor.");
+        new Notice('No Emmet abbreviation found before cursor.');
         return;
       }
 
