@@ -12,8 +12,11 @@
   },
   "dependencies": {
     "marked": "18.0.5",
+    "marked-footnote": "1.4.0",
+    "marked-katex-extension": "5.1.10",
     "playwright": "1.61.1",
-    "pretext": "0.3.0"
+    "pretext": "0.3.0",
+    "shiki": "4.3.0"
   },
   "devDependencies": {
     "@types/node": "26.0.1",

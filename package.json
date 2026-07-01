@@ -12,7 +12,11 @@
     "bootstrap": "pnpm install",
     "build": "pnpm -r build",
     "dev": "pnpm -r dev",
+    "build:attachment": "pnpm -C plugins/obsidian-attachment build",
+    "build:emmet": "pnpm -C plugins/obsidian-emmet build",
+    "build:pdf": "pnpm -C plugins/obsidian-claude-pdf build",
     "test:emmet": "pnpm -C plugins/obsidian-emmet test",
+    "test:pdf": "pnpm -C plugins/obsidian-claude-pdf test",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
