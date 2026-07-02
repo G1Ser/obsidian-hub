@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting } from 'obsidian';
+import { App, PluginSettingTab, Setting, Notice } from 'obsidian';
 import type ObsidianAttachmentCorePlugin from './main';
 
 export interface AttachmentCoreSettings {
@@ -27,7 +27,20 @@ export class AttachmentCoreSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl('h2', { text: 'Attachment Core Settings' });
+    /* heading + reset button */
+    const heading = containerEl.createDiv();
+    heading.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:1em;';
+    heading.createEl('h2', { text: 'Attachment Core Settings' });
+    const spacer = heading.createDiv();
+    spacer.style.cssText = 'flex:1;';
+    const resetBtn = heading.createEl('button', { text: 'Reset to defaults' });
+    resetBtn.style.cssText = 'font-size:0.85em;';
+    resetBtn.onclick = async () => {
+      Object.assign(this.plugin.settings, DEFAULT_SETTINGS);
+      await this.plugin.saveSettings();
+      this.display();
+      new Notice('Settings reset to defaults.');
+    };
 
     new Setting(containerEl)
       .setName('Assets root folder')
