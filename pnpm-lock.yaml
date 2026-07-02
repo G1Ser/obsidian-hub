@@ -40,9 +40,6 @@ importers:
       playwright:
         specifier: 1.61.1
         version: 1.61.1
-      pretext:
-        specifier: 0.3.0
-        version: 0.3.0
       shiki:
         specifier: 4.3.0
         version: 4.3.0
@@ -845,10 +842,6 @@ packages:
   postcss@8.5.16:
     resolution: {integrity: sha512-vuwillviilfKZsg0VGj5R/YwwcHx4SLsIOI/7K6mQkWx+l5cUHTjj5g0AasTBcyXsbfTgrwsUNmVUb5xVwyPwg==}
     engines: {node: ^10 || ^12 || >=14}
-
-  pretext@0.3.0:
-    resolution: {integrity: sha512-Lw7xNZ0KL1N1pzcDr/y2rqsygNDCaZkwP4d/SglB9wFOkFtWPGj62MfYG63CAcf+J1Io5QBfGglzyULx3F9WdA==}
-    hasBin: true
 
   prettier@3.9.4:
     resolution: {integrity: sha512-yWG/o/4oJfo036EKAfK6ACAoDOfHeRHx4tuxkfBZiauURiaSmYwlpOr5LQqKtIkRD2z1PLteme2WoxEnj4tHTg==}
@@ -1677,8 +1670,6 @@ snapshots:
       nanoid: 3.3.15
       picocolors: 1.1.1
       source-map-js: 1.2.1
-
-  pretext@0.3.0: {}
 
   prettier@3.9.4: {}
 

@@ -1,0 +1,35 @@
+.callout {
+  margin: 0 0 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #1f1e1d1a;
+  border-left: 3px solid rgb(var(--callout-color));
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.18)),
+    linear-gradient(90deg, rgba(var(--callout-color), 0.1), transparent 32%);
+  box-shadow: 0 12px 28px -26px rgba(31, 30, 29, 0.12);
+  color: var(--claude-text);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.callout-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  line-height: 1.3;
+  font-family: var(--claude-font-sans);
+  font-weight: 700;
+  font-size: 0.82em;
+  color: rgb(var(--callout-color));
+  margin-bottom: 0.35rem;
+}
+
+.callout-content {
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
+.callout-content > :last-child {
+  margin-bottom: 0;
+}
