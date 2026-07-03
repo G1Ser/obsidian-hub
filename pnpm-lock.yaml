@@ -47,6 +47,15 @@ importers:
       '@types/node':
         specifier: 26.0.1
         version: 26.0.1
+      '@types/postcss-prefix-selector':
+        specifier: 1.16.3
+        version: 1.16.3
+      postcss:
+        specifier: 8.5.16
+        version: 8.5.16
+      postcss-prefix-selector:
+        specifier: 2.1.1
+        version: 2.1.1(postcss@8.5.16)
       tsx:
         specifier: 4.22.4
         version: 4.22.4
@@ -553,6 +562,9 @@ packages:
   '@types/node@26.0.1':
     resolution: {integrity: sha512-fc3KiUoBt6kie0N9bIW3E47vZsuaMf0PM2AaUpLCLT0s/LvX1nxAim6Fc049cNxODPpGm6qRAuUOB86SkRuPQw==}
 
+  '@types/postcss-prefix-selector@1.16.3':
+    resolution: {integrity: sha512-YZLPWRkJIrYjwaqojVDXzaRCAEYslRAm8Shznwwn+ZFA4iKQR4LZlS3d+ZMVteFz4iyQnngZZG7k/GIzV1f3mQ==}
+
   '@types/tern@0.23.9':
     resolution: {integrity: sha512-ypzHFE/wBzh+BlH6rrBgS5I/Z7RD21pGhZ2rltb/+ZrVM1awdZwjx7hE5XfuYgHWk9uvV5HLZN3SloevCAp3Bw==}
 
@@ -838,6 +850,11 @@ packages:
     resolution: {integrity: sha512-DWnY5o3YbLWK4GovuAVwpqL+1VwGNdUGrRr++8j8PtQQzvAVZUIMjKQ90fY689sEJZJBbZVw1rXaOKSTitkzPQ==}
     engines: {node: '>=18'}
     hasBin: true
+
+  postcss-prefix-selector@2.1.1:
+    resolution: {integrity: sha512-ZBgf427Et6+XnrnJ9VXtJEKCjJwTvn2wn/qMg+wvvlRhIeFIAxdbrlZZ0CSsWYMJfcyPLBh8ogj5O1kb/Mcx3g==}
+    peerDependencies:
+      postcss: ^8.0.0
 
   postcss@8.5.16:
     resolution: {integrity: sha512-vuwillviilfKZsg0VGj5R/YwwcHx4SLsIOI/7K6mQkWx+l5cUHTjj5g0AasTBcyXsbfTgrwsUNmVUb5xVwyPwg==}
@@ -1362,6 +1379,10 @@ snapshots:
     dependencies:
       undici-types: 8.3.0
 
+  '@types/postcss-prefix-selector@1.16.3':
+    dependencies:
+      postcss: 8.5.16
+
   '@types/tern@0.23.9':
     dependencies:
       '@types/estree': 1.0.8
@@ -1664,6 +1685,10 @@ snapshots:
       playwright-core: 1.61.1
     optionalDependencies:
       fsevents: 2.3.2
+
+  postcss-prefix-selector@2.1.1(postcss@8.5.16):
+    dependencies:
+      postcss: 8.5.16
 
   postcss@8.5.16:
     dependencies:

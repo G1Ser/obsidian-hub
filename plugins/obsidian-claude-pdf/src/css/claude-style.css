@@ -64,161 +64,120 @@
   --claude-heading-line-height: 1.22;
 }
 
+* {
+  box-sizing: border-box;
+  font-family: var(--claude-font-serif);
+}
+
 /* =========================================================================
    Typography
    ========================================================================= */
 
-.claude-root h1,
-.claude-root h2,
-.claude-root h3,
-.claude-root h4,
-.claude-root h5,
-.claude-root h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--claude-heading);
-  font-family: var(--claude-font-serif);
+  font-family: var(--claude-font-sans);
   font-weight: 700;
   line-height: var(--claude-heading-line-height);
   padding-left: 0.5rem;
   padding-right: 2rem;
 }
 
-.claude-root h1 {
+h1 {
   margin: 1.5rem 0 0.5rem;
   font-size: 1.5rem;
 }
 
-.claude-root h2 {
+h2 {
   margin: 1.5rem 0 0.5rem;
   font-size: 1.25rem;
 }
 
-.claude-root h3 {
+h3 {
   margin: 1.25rem 0 0.25rem;
   font-size: 1.15rem;
 }
 
-.claude-root h4 {
+h4 {
   margin: 1.25rem 0 0.25rem;
   font-size: 1rem;
 }
 
-.claude-root h5,
-.claude-root h6 {
+h5,
+h6 {
   margin: 1.25rem 0 0.25rem;
   font-size: 0.875rem;
   font-weight: 600;
 }
 
 /* =========================================================================
-   Paragraph & Inline
+   Paragraph
    ========================================================================= */
 
-.claude-root p {
+p {
   margin: 0 0 var(--claude-paragraph-gap);
   padding-left: 0.5rem;
   padding-right: 2rem;
 }
 
-.claude-root a {
+a {
   color: var(--claude-accent);
   text-decoration: none;
   border-bottom: 1px solid color-mix(in srgb, var(--claude-accent) 35%, transparent);
 }
 
-.claude-root a:hover,
-.claude-root .internal-link:hover {
+a:hover {
   color: var(--claude-accent-hover);
   border-bottom-color: currentColor;
 }
 
-.claude-root .internal-link {
-  color: var(--claude-accent);
-  text-decoration: none;
-  border-bottom: 1px solid color-mix(in srgb, var(--claude-accent) 35%, transparent);
-}
-
-/* Tags */
-.pdf-root .tag,
-.markdown-body .tag {
-  color: var(--claude-code-text);
-  background: var(--claude-code-bg);
-  border: 0.5px solid var(--claude-border);
-  border-radius: var(--claude-radius-sm);
-  padding: 1px 6px;
-  font-family: var(--claude-font-sans);
-  font-size: 0.88em;
-  text-decoration: none;
-}
-
-.pdf-root strong,
-.markdown-body strong {
-  color: var(--claude-heading);
-  font-weight: 700;
-}
-
-.pdf-root em,
-.markdown-body em {
-  font-style: italic;
-}
-
-/* Underline (u) — solid accent underline */
-.pdf-root u,
-.markdown-body u {
-  text-decoration: underline solid #d97757;
-  text-underline-position: under;
-  text-underline-offset: 4px;
-}
-
-.pdf-root small,
-.markdown-body small {
-  color: var(--claude-text-muted);
-}
-
-/* Keyboard key */
-.pdf-root kbd,
-.markdown-body kbd {
-  color: var(--claude-code-text);
-  font-family: var(--claude-font-mono);
-  background-color: var(--claude-code-bg);
-  border-radius: var(--claude-radius-sm);
-  font-size: 0.875em;
-  padding: 0.1em 0.25em;
+mark {
+  background: transparent;
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--claude-accent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.18em;
 }
 
 /* =========================================================================
    List
    ========================================================================= */
-.claude-root ul {
+ul {
   list-style-type: disc;
   margin: 0 0 0.75rem 0;
   padding-left: 2rem;
 }
 
-.claude-root ol {
+ol {
   margin: 0 0 0.75rem 0;
   padding-left: 2rem;
 }
 
-.claude-root li {
+li {
   margin-inline-start: 3ch;
   padding: 0.25rem;
   margin-bottom: 0.25rem;
 }
 
-.claude-root li:last-child {
+li:last-child {
   margin-bottom: 0;
 }
 
-.claude-root li::marker {
+li::marker {
   color: var(--claude-text-muted);
 }
 
-.claude-root li:has(input[type='checkbox']) {
+li:has(input[type='checkbox']) {
   list-style: none;
   margin-inline-start: 0;
 }
 
-.claude-root li:has(input[type='checkbox']:checked) {
+li:has(input[type='checkbox']:checked) {
   text-decoration: line-through;
   color: var(--claude-text-faint);
 }
@@ -227,8 +186,7 @@
    Blockquote
    ========================================================================= */
 
-.pdf-root blockquote,
-.markdown-body blockquote {
+blockquote {
   margin: 0.5rem 0 1rem 0.5rem;
   padding: 0.2rem 1.5rem 0.2rem 1rem;
   background: transparent;
@@ -238,26 +196,27 @@
   page-break-inside: avoid;
 }
 
-.pdf-root blockquote > :last-child,
-.markdown-body blockquote > :last-child {
+blockquote > :last-child {
   margin-bottom: 0;
 }
 
 /* =========================================================================
    Code
    ========================================================================= */
-
-.claude-root pre:not(.mermaid) {
-  margin: 1rem 0;
-  padding: 1rem;
-  background: var(--claude-code-bg) !important;
-  border: 0.5px solid var(--claude-border);
-  border-radius: var(--claude-radius-md);
-}
-
-.claude-root pre code {
+code {
   font-family: var(--claude-font-mono);
   font-size: 0.875rem;
+}
+
+:not(pre) code {
+  background: var(--claude-code-bg) !important;
+  color: var(--claude-code-text);
+  border: 0.5px solid var(--claude-border);
+  border-radius: var(--claude-radius-sm);
+  padding: 0.13em 0.34em;
+}
+
+pre code {
   line-height: 1.625;
 }
 
@@ -265,15 +224,15 @@
    Table
    ========================================================================= */
 
-.claude-root table {
+table {
   width: 100%;
   margin: 1rem 0 1.5rem;
   border-collapse: collapse;
-  font-family: var(--claude-font-serif);
+  font-family: var(--claude-font-sans);
   font-size: 1em;
 }
 
-.claude-root th {
+th {
   border-bottom: 1px solid rgba(31, 30, 29, 0.6);
   font-weight: 700;
   text-align: left;
@@ -281,14 +240,14 @@
   color: var(--claude-heading);
 }
 
-.claude-root td {
+td {
   border-bottom: 0.5px solid var(--claude-border);
   padding: 0.6rem 0.8rem 0.6rem 0.2rem;
   text-align: left;
   vertical-align: top;
 }
 
-.claude-root tr:last-child td {
+tr:last-child td {
   border-bottom: 1px solid var(--claude-border);
 }
 
@@ -296,8 +255,8 @@
    Media
    ========================================================================= */
 
-.claude-root img,
-.claude-root video {
+img,
+video {
   max-width: 100%;
   max-height: 500px;
   height: auto;
@@ -312,7 +271,7 @@
    Paragraph
    ========================================================================= */
 
-.claude-root hr {
+hr {
   height: 2px;
   margin: 2em 0;
   border: 0;
@@ -320,11 +279,10 @@
 }
 
 /* =========================================================================
-   Footnotes
+   Footnote
    ========================================================================= */
 
-.pdf-root .footnote-ref,
-.markdown-body .footnote-ref {
+.footnote-ref {
   color: var(--claude-accent);
   text-decoration: none;
   font-weight: 600;
@@ -332,18 +290,11 @@
   vertical-align: super;
 }
 
-.pdf-root .footnote-ref:hover,
-.markdown-body .footnote-ref:hover {
+.footnote-ref:hover {
   color: var(--claude-accent-hover);
 }
 
-.pdf-root .sr-only,
-.markdown-body .sr-only {
-  display: none;
-}
-
-.pdf-root .footnotes,
-.markdown-body .footnotes {
+.footnotes {
   margin-top: 3rem;
   padding-top: 1rem;
   border-top: 1px solid var(--claude-border);
@@ -351,32 +302,27 @@
   color: var(--claude-text-muted);
 }
 
-.pdf-root .footnotes ol,
-.markdown-body .footnotes ol {
+.footnotes ol {
   padding-left: 1.5rem;
 }
 
-.pdf-root .footnotes li,
-.markdown-body .footnotes li {
+.footnotes li {
   margin-bottom: 0.5rem;
 }
 
-.pdf-root .footnotes li > p,
-.markdown-body .footnotes li > p {
+.footnotes li > p {
   display: inline;
   margin: 0;
   padding: 0;
 }
 
-.pdf-root .footnote-backref,
-.markdown-body .footnote-backref {
+.footnote-backref {
   color: var(--claude-accent);
   text-decoration: none;
   font-weight: 700;
   margin-left: 0.35em;
 }
 
-.pdf-root .footnote-backref:hover,
-.markdown-body .footnote-backref:hover {
+.footnote-backref:hover {
   color: var(--claude-accent-hover);
 }

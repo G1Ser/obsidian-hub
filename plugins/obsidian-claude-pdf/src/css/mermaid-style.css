@@ -2,3 +2,11 @@
   background: transparent;
   border: none;
 }
+
+pre:not(.mermaid) {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: var(--claude-code-bg) !important;
+  border: 0.5px solid var(--claude-border);
+  border-radius: var(--claude-radius-md);
+}

@@ -33,3 +33,23 @@
 .callout-content > :last-child {
   margin-bottom: 0;
 }
+
+.internal-link {
+  color: var(--claude-accent);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--claude-accent) 35%, transparent);
+}
+
+.internal-link:hover {
+  color: var(--claude-accent-hover);
+  border-bottom-color: currentColor;
+}
+
+kbd {
+  color: var(--claude-code-text);
+  font-family: var(--claude-font-mono);
+  background-color: var(--claude-code-bg);
+  border-radius: var(--claude-radius-sm);
+  font-size: 0.875em;
+  padding: 0.1em 0.25em;
+}
