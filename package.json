@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "packageManager": "pnpm@10.30.3",
   "engines": {
-    "pnpm": ">=10",
+    "pnpm": ">=8",
     "noe": ">=21.0.0"
   },
   "scripts": {
