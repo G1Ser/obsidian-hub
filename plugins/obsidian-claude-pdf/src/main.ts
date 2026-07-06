@@ -134,7 +134,7 @@ export default class ClaudeExportPlugin extends Plugin {
 
     const katexCss = await loadCss(this.app, `${base}/katex-style.css`);
 
-    const css = `${claudeCss}${mermaidCss}${katexCss}${obsidianCss}`;
+    const css = `${claudeCss}${mermaidCss}${katexCss}${obsidianCss}${this.buildWatermarkCss()}`;
     const body = await markdownToHtml(md);
 
     return `<!doctype html>
@@ -159,5 +159,37 @@ ${body}
   </article>
 </body>
 </html>`;
+  }
+
+  private buildWatermarkCss(): string {
+    if (!this.settings.watermark) return '';
+
+    return `
+.pdf-page {
+  position: relative;
+}
+
+.pdf-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.pdf-page::before {
+  content: ${JSON.stringify(this.settings.watermarkText)};
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 0;
+  transform: translate(-50%, -50%) rotate(55deg);
+  color: ${this.settings.watermarkColor};
+  opacity: ${this.settings.watermarkOpacity};
+  font-size: ${this.settings.watermarkSize}px;
+  font-family: var(--pdf-font-sans);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+}
+`;
   }
 }
