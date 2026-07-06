@@ -33,6 +33,27 @@ const CALLOUTS: Record<string, { color: string; icon: string; label: string }> =
   info: { color: '8, 109, 221', icon: ICONS.pencil, label: 'Info' },
 };
 
+const CALLOUT_ALIASES: Record<string, string> = {
+  abstract: 'note',
+  summary: 'note',
+  tldr: 'note',
+  todo: 'info',
+  hint: 'tip',
+  important: 'tip',
+  check: 'success',
+  done: 'success',
+  question: 'info',
+  help: 'info',
+  faq: 'info',
+  caution: 'warning',
+  attention: 'warning',
+  failure: 'danger',
+  fail: 'danger',
+  missing: 'danger',
+  error: 'danger',
+  cite: 'quote',
+};
+
 /* ---- init marked ---- */
 
 marked.use(markedKatex({ throwOnError: false }));
@@ -40,20 +61,33 @@ marked.use(markedFootnote());
 
 /* ---- Obsidian syntax pre-processing ---- */
 
-const convertCallouts = (md: string): string =>
-  md.replace(
-    /^> \[!(\w+)\](.*)\n((?:>.*\n?)*)/gm,
-    (_: string, type: string, title: string, body: string) => {
-      const cfg = CALLOUTS[type.toLowerCase()];
-      if (!cfg) return _;
-      const heading = title.trim() || cfg.label;
-      const content = body
-        .split('\n')
-        .map((l: string) => l.replace(/^>\s?/, ''))
-        .join('\n')
-        .trim();
-      return [
-        `<div class="callout" style="--callout-color: ${cfg.color}" data-callout="${type}">`,
+const convertCallouts = (md: string): string => {
+  const lines = md.split('\n');
+  const out: string[] = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const match = lines[i].match(/^>\s*\[!([A-Za-z][\w-]*)(?:[+-])?\]\s*(.*)$/);
+
+    if (!match) {
+      out.push(lines[i]);
+      continue;
+    }
+
+    const rawType = match[1].toLowerCase();
+    const type = CALLOUT_ALIASES[rawType] || rawType;
+    const cfg = CALLOUTS[type] || CALLOUTS.note;
+    const heading = match[2].trim() || cfg.label;
+    const body: string[] = [];
+
+    while (i + 1 < lines.length && lines[i + 1].startsWith('>')) {
+      i++;
+      body.push(lines[i].replace(/^>\s?/, ''));
+    }
+
+    const content = body.join('\n').trim();
+    out.push(
+      [
+        `<div class="callout" style="--callout-color: ${cfg.color}" data-callout="${rawType}">`,
         `  <div class="callout-title">`,
         `    <div class="callout-icon">${cfg.icon}</div>`,
         `    <div class="callout-title-inner">${heading}</div>`,
@@ -64,10 +98,12 @@ const convertCallouts = (md: string): string =>
         ``,
         `  </div>`,
         `</div>`,
-        ``,
-      ].join('\n');
-    },
-  );
+      ].join('\n'),
+    );
+  }
+
+  return out.join('\n');
+};
 
 /* ---- Expand Markdown To Fit Obsidian ---- */
 const preprocessMarkdown = (md: string): string => {

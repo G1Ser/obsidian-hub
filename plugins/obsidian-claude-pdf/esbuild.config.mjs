@@ -1,8 +1,22 @@
 import { buildPlugin } from '../../scripts/build.mjs';
+import { build } from 'esbuild';
 import fs from 'node:fs';
 import path from 'node:path';
 
+fs.mkdirSync('dist', { recursive: true });
+
+await build({
+  entryPoints: [path.resolve('src/utils/paged/index.ts')],
+  outfile: path.resolve('dist/paged.js'),
+  bundle: true,
+  format: 'iife',
+  platform: 'browser',
+  target: ['chrome120'],
+});
+
 await buildPlugin('obsidian-claude-pdf', {
+  platform: 'node',
+  external: ['obsidian', 'electron'],
   plugins: [
     {
       name: 'copy-css',
