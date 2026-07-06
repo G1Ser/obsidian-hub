@@ -3,17 +3,17 @@ import { build } from 'esbuild';
 import { chromium } from 'playwright';
 
 async function main() {
-  const contentHtmlPath = path.resolve('tests/content.html');
-  const outputPdfPath = path.resolve('C:/Users/Administrator/Downloads/paged.pdf');
+  const contentHtmlPath = path.resolve('tests/output/raw.html');
+  const outputPdfPath = path.resolve('tests/output/测试.pdf');
   const bundledPagedPath = path.resolve('tests/.paged.bundle.js');
 
   await build({
-    entryPoints: [path.resolve('src/paged.ts')],
+    entryPoints: [path.resolve('src/utils/paged/index.ts')],
     outfile: bundledPagedPath,
     bundle: true,
     format: 'iife',
     platform: 'browser',
-    target: ['chrome100'],
+    target: ['chrome120'],
   });
 
   const browser = await chromium.launch({
@@ -24,8 +24,17 @@ async function main() {
   const page = await browser.newPage();
 
   await page.goto(`file://${contentHtmlPath}`, {
-    waitUntil: 'networkidle',
+    waitUntil: 'domcontentloaded',
+    timeout: 0,
   });
+
+  await page
+    .waitForLoadState('load', {
+      timeout: 10000,
+    })
+    .catch(() => {
+      console.warn('load timeout, continue...');
+    });
 
   await page.addScriptTag({
     path: bundledPagedPath,
@@ -36,8 +45,10 @@ async function main() {
       rootSelector: '#source',
       pageWidth: '210mm',
       pageHeight: '297mm',
-      padding: '5mm 10mm',
-      gap: '5px',
+      marginTop: '5mm',
+      marginRight: '10mm',
+      marginBottom: '5mm',
+      marginLeft: '10mm',
     });
   });
 
@@ -45,13 +56,13 @@ async function main() {
     path: outputPdfPath,
     format: 'A4',
     printBackground: true,
+    preferCSSPageSize: true,
     margin: {
       top: '0mm',
       right: '0mm',
       bottom: '0mm',
       left: '0mm',
     },
-    preferCSSPageSize: true,
   });
 
   await browser.close();

@@ -8,14 +8,24 @@ await buildPlugin('obsidian-claude-pdf', {
       name: 'copy-css',
       setup(build) {
         build.onEnd(() => {
-          fs.copyFileSync(
-            path.resolve('src/css/claude-style.css'),
-            path.resolve('dist/claude-style.css'),
-          );
-          fs.copyFileSync(
-            path.resolve('src/css/katex.base64.css'),
-            path.resolve('dist/katex.base64.css'),
-          );
+          const srcCssDir = path.resolve('src/css');
+          const distDir = path.resolve('dist');
+
+          // 确保 dist 目录存在
+          if (!fs.existsSync(distDir)) {
+            fs.mkdirSync(distDir, { recursive: true });
+          }
+
+          const files = fs.readdirSync(srcCssDir);
+
+          for (const file of files) {
+            const srcPath = path.join(srcCssDir, file);
+            const distPath = path.join(distDir, file);
+
+            if (fs.statSync(srcPath).isFile()) {
+              fs.copyFileSync(srcPath, distPath);
+            }
+          }
         });
       },
     },

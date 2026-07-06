@@ -1,9 +1,9 @@
-import fs from 'fs';
+import { App } from 'obsidian';
 import postcss from 'postcss';
 import prefixSelector from 'postcss-prefix-selector';
 
-const loadCss = async (path: string, prefix?: string) => {
-  const css = fs.readFileSync(path, 'utf-8');
+const loadCss = async (app: App, path: string, prefix?: string) => {
+  const css = await app.vault.adapter.read(path);
   if (!prefix) return css;
   const result = await postcss([
     prefixSelector({

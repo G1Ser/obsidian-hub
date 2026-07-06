@@ -1,6 +1,26 @@
 import fs from 'fs';
 import { markdownToHtml } from '../src/utils/converter';
-import { loadCss } from '../src/utils/postCss';
+import postcss from 'postcss';
+import prefixSelector from 'postcss-prefix-selector';
+
+const loadCss = async (path: string, prefix?: string) => {
+  const css = fs.readFileSync(path, 'utf-8');
+  if (!prefix) return css;
+  const result = await postcss([
+    prefixSelector({
+      prefix,
+      transform(prefix, selector) {
+        if (selector === ':root') {
+          return ':root';
+        } else if (selector === '*') {
+          return prefix;
+        }
+        return `${prefix} ${selector}`;
+      },
+    }),
+  ]).process(css, { from: undefined });
+  return result.css;
+};
 
 const CLAUDE_CLASS = '.claude-root';
 const md = fs.readFileSync('tests/测试导出.md', 'utf8');

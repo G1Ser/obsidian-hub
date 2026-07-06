@@ -8,7 +8,7 @@
     "build": "tsc --noEmit && node esbuild.config.mjs",
     "typecheck": "tsc --noEmit",
     "dev": "node esbuild.config.mjs --watch",
-    "test": "tsx tests/converter.ts"
+    "test": "tsx tests/converter.ts && tsx tests/paged.ts"
   },
   "dependencies": {
     "marked": "18.0.5",

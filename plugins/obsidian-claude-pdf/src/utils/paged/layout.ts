@@ -9,14 +9,49 @@ export const createLayout = (source: HTMLElement, opts: ResolvedPagedOptions): P
   const sourceClassName = source.className;
 
   document.body.innerHTML = '';
+  const layout = {} as PageLayout;
+  layout.sourceClassName = sourceClassName;
+  layout.createPage = () => createPage(sourceClassName);
+  layout.newPage = () => {
+    layout.currentPage = layout.createPage();
+    layout.currentContainer = layout.currentPage;
+    return layout.currentPage;
+  };
+  layout.isOverflow = () => {
+    return layout.currentPage.scrollHeight > layout.currentPage.clientHeight + 1;
+  };
+  layout.tryAppend = <T extends HTMLElement>(node: T) => {
+    layout.currentContainer.appendChild(node);
 
-  const layout: PageLayout = {
-    sourceClassName,
-    currentContent: null as unknown as HTMLElement,
-    createPage: () => createPage(sourceClassName),
+    if (!layout.isOverflow()) {
+      return node;
+    }
+
+    node.remove();
+    return null;
   };
 
-  layout.currentContent = layout.createPage();
+  layout.forceAppend = <T extends HTMLElement>(node: T): T => {
+    layout.currentContainer.appendChild(node);
+    return node;
+  };
+
+  layout.withContainer = <T>(container: HTMLElement, fn: () => T): T => {
+    const prev = layout.currentContainer;
+    layout.currentContainer = container;
+    try {
+      return fn();
+    } finally {
+      layout.currentContainer = prev;
+    }
+  };
+
+  layout.clone = <T extends HTMLElement>(node: T): T => {
+    return node.cloneNode(true) as T;
+  };
+
+  layout.currentPage = layout.createPage();
+  layout.currentContainer = layout.currentPage;
 
   return layout;
 };
@@ -52,6 +87,7 @@ body {
     padding: ${opts.marginTop} ${opts.marginRight} ${opts.marginBottom} ${opts.marginLeft};
     box-sizing: border-box;
     background: var(--claude-bg);
+    overflow:hidden;
 }
 
 @media print {

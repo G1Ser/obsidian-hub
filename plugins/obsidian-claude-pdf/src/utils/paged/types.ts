@@ -24,6 +24,16 @@ export interface ResolvedPagedOptions {
 
 export interface PageLayout {
   sourceClassName: string;
-  currentContent: HTMLElement;
+  currentPage: HTMLElement;
+  currentContainer: HTMLElement;
+
   createPage: () => HTMLElement;
+  newPage: () => HTMLElement;
+
+  isOverflow: () => boolean;
+
+  tryAppend: <T extends HTMLElement>(node: T) => T | null;
+  forceAppend: <T extends HTMLElement>(node: T) => T;
+  clone: <T extends HTMLElement>(node: T) => T;
+  withContainer: <T>(container: HTMLElement, fn: () => T) => T;
 }

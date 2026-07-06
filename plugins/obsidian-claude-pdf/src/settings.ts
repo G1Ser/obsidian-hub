@@ -6,13 +6,14 @@ export interface Settings {
   marginRight: number;
   marginBottom: number;
   marginLeft: number;
+
   outputDir: string;
+
   watermark: boolean;
   watermarkText: string;
   watermarkColor: string;
   watermarkOpacity: number;
   watermarkSize: number;
-  watermarkCount: number;
 }
 
 export const DEFAULTS: Settings = {
@@ -20,13 +21,14 @@ export const DEFAULTS: Settings = {
   marginRight: 10,
   marginBottom: 5,
   marginLeft: 10,
+
   outputDir: '',
+
   watermark: false,
   watermarkText: 'watermark',
   watermarkColor: '#b0a99e',
   watermarkOpacity: 0.2,
   watermarkSize: 80,
-  watermarkCount: 3,
 };
 
 export class SettingTab extends PluginSettingTab {
@@ -139,16 +141,6 @@ export class SettingTab extends PluginSettingTab {
           }
         }),
       );
-
-    new Setting(containerEl).setName('Count per page').addText(t =>
-      t.setValue(String(this.plugin.settings.watermarkCount)).onChange(async v => {
-        const n = parseInt(v);
-        if (!isNaN(n) && n > 0) {
-          this.plugin.settings.watermarkCount = n;
-          await this.plugin.saveSettings();
-        }
-      }),
-    );
 
     /* ---- margins ---- */
     containerEl.createEl('h3', { text: 'A4 Margins (mm)' });

@@ -6,6 +6,7 @@ import { mergeOptions } from './options';
 import { prepareDocument } from './prepare';
 import { normalizeDocument } from './normalize';
 import { createLayout } from './layout';
+import { layoutBlocks } from './append';
 export const paged = async (options: PagedOptions = {}) => {
   const opts = mergeOptions(options);
   const { rootSelector } = opts;
@@ -26,8 +27,16 @@ export const paged = async (options: PagedOptions = {}) => {
   const blocks = Array.from(source.children).map(el => el.cloneNode(true) as HTMLElement);
 
   // 创建A4页面
-  createLayout(source, opts);
+  const layout = createLayout(source, opts);
 
   // 开始分页
-  layoutBlocks(blocks, opts);
+  layoutBlocks(blocks, layout, opts);
 };
+
+declare global {
+  interface Window {
+    paged: typeof paged;
+  }
+}
+
+window.paged = paged;
