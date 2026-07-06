@@ -36,6 +36,25 @@ const convertMermaidSvgToImg = () => {
   }
 };
 
+const waitForImages = async () => {
+  const images = Array.from(document.images);
+
+  await Promise.all(
+    images.map(
+      img =>
+        new Promise<void>(resolve => {
+          if (img.complete) {
+            resolve();
+            return;
+          }
+
+          img.addEventListener('load', () => resolve(), { once: true });
+          img.addEventListener('error', () => resolve(), { once: true });
+        }),
+    ),
+  );
+};
+
 export const prepareDocument = async () => {
   await document.fonts.ready;
   const win = window as any;
@@ -43,4 +62,5 @@ export const prepareDocument = async () => {
     await win.mermaid.run();
     convertMermaidSvgToImg();
   }
+  await waitForImages();
 };

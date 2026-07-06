@@ -1,4 +1,4 @@
-import { FileSystemAdapter, Notice, Plugin, TFile } from 'obsidian';
+import { App, FileSystemAdapter, Modal, Notice, Plugin, TFile } from 'obsidian';
 import { Settings, DEFAULTS, SettingTab } from './settings';
 import { markdownToHtml } from './utils/converter';
 import { loadCss } from './utils/postCss';
@@ -35,31 +35,49 @@ export default class ClaudeExportPlugin extends Plugin {
       return;
     }
 
+    const progress = new ExportProgressModal(this.app);
+    progress.open();
+
     const { remote } = (require as any)('electron');
     const fs = (require as any)('fs');
     const path = (require as any)('path');
     const os = (require as any)('os');
     const { pathToFileURL } = (require as any)('url');
 
-    const dir = this.settings.outputDir || remote.app.getPath('desktop');
-    fs.mkdirSync(dir, { recursive: true });
-
-    const md = await this.app.vault.read(file);
-    const html = await this.buildHtml(md);
-    const outputPath = path.join(dir, `${file.basename}.pdf`);
-    const tempHtmlPath = path.join(os.tmpdir(), `obsidian-claude-pdf-${Date.now()}.html`);
-    const pagedScriptPath = path.join(this.getPluginDir(), 'paged.js');
-
-    fs.writeFileSync(tempHtmlPath, html, 'utf8');
-
-    const win = new remote.BrowserWindow({
-      width: 1240,
-      height: 1754,
-      show: false,
-    });
+    let win: any = null;
+    let tempHtmlPath = '';
 
     try {
+      progress.update(8, '准备导出目录...');
+
+      const dir = this.settings.outputDir || remote.app.getPath('desktop');
+      fs.mkdirSync(dir, { recursive: true });
+
+      progress.update(18, '读取当前 Markdown...');
+
+      const md = await this.app.vault.read(file);
+
+      progress.update(32, '生成 Claude HTML...');
+
+      const html = await this.buildHtml(md);
+      const outputPath = path.join(dir, `${file.basename}.pdf`);
+      tempHtmlPath = path.join(os.tmpdir(), `obsidian-claude-pdf-${Date.now()}.html`);
+      const pagedScriptPath = path.join(this.getPluginDir(), 'paged.js');
+
+      fs.writeFileSync(tempHtmlPath, html, 'utf8');
+
+      progress.update(46, '加载导出页面...');
+
+      win = new remote.BrowserWindow({
+        width: 1240,
+        height: 1754,
+        show: false,
+      });
+
       await win.loadURL(pathToFileURL(tempHtmlPath).href);
+
+      progress.update(60, '加载分页规则...');
+
       await win.webContents.executeJavaScript(fs.readFileSync(pagedScriptPath, 'utf8'));
 
       const { marginTop, marginRight, marginBottom, marginLeft } = this.settings;
@@ -74,7 +92,11 @@ export default class ClaudeExportPlugin extends Plugin {
         marginLeft: `${marginLeft}mm`,
       };
 
+      progress.update(74, '按 A4 页面分页...');
+
       await win.webContents.executeJavaScript(`window.paged(${JSON.stringify(pagedOptions)})`);
+
+      progress.update(88, '生成 PDF 文件...');
 
       const pdf = await win.webContents.printToPDF({
         pageSize: 'A4',
@@ -88,13 +110,26 @@ export default class ClaudeExportPlugin extends Plugin {
         },
       });
 
-      fs.writeFileSync(outputPath, pdf);
-    } finally {
-      win.destroy();
-      fs.rmSync(tempHtmlPath, { force: true });
-    }
+      progress.update(96, '写入桌面文件...');
 
-    new Notice(`PDF 已导出：${outputPath}`);
+      fs.writeFileSync(outputPath, pdf);
+
+      progress.update(100, '导出完成');
+      window.setTimeout(() => progress.close(), 500);
+      new Notice(`PDF 已导出：${outputPath}`);
+    } catch (error) {
+      progress.fail('导出失败');
+      new Notice(`PDF 导出失败：${error instanceof Error ? error.message : String(error)}`);
+      throw error;
+    } finally {
+      if (win) {
+        win.destroy();
+      }
+
+      if (tempHtmlPath) {
+        fs.rmSync(tempHtmlPath, { force: true });
+      }
+    }
   }
 
   private getPluginDir(): string {
@@ -191,5 +226,53 @@ ${body}
   pointer-events: none;
 }
 `;
+  }
+}
+
+class ExportProgressModal extends Modal {
+  private fillEl!: HTMLElement;
+  private percentEl!: HTMLElement;
+  private messageEl!: HTMLElement;
+
+  constructor(app: App) {
+    super(app);
+  }
+
+  onOpen() {
+    const { contentEl } = this;
+    contentEl.empty();
+
+    contentEl.createEl('h2', { text: '正在导出 PDF' });
+
+    this.messageEl = contentEl.createDiv({ text: '准备开始...' });
+    this.messageEl.style.cssText = 'margin:8px 0 12px;color:var(--text-muted);';
+
+    const track = contentEl.createDiv();
+    track.style.cssText =
+      'height:10px;border-radius:999px;background:var(--background-modifier-border);overflow:hidden;';
+
+    this.fillEl = track.createDiv();
+    this.fillEl.style.cssText =
+      'height:100%;width:0%;border-radius:999px;background:var(--interactive-accent);transition:width 160ms ease;';
+
+    this.percentEl = contentEl.createDiv({ text: '0%' });
+    this.percentEl.style.cssText =
+      'margin-top:8px;text-align:right;font-variant-numeric:tabular-nums;color:var(--text-muted);';
+  }
+
+  onClose() {
+    this.contentEl.empty();
+  }
+
+  update(percent: number, message: string) {
+    const value = Math.max(0, Math.min(100, Math.round(percent)));
+    this.messageEl.setText(message);
+    this.fillEl.style.width = `${value}%`;
+    this.percentEl.setText(`${value}%`);
+  }
+
+  fail(message: string) {
+    this.messageEl.setText(message);
+    this.fillEl.style.background = 'var(--text-error)';
   }
 }

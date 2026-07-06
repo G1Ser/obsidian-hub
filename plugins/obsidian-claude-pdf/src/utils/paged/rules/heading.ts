@@ -1,5 +1,7 @@
 import type { PaginationRule } from '.';
 import type { PageLayout } from '../types';
+import { isImageBlock } from './image';
+import { isList } from './list';
 
 const HEADING_SELECTOR = 'h1,h2,h3,h4,h5,h6';
 
@@ -22,18 +24,17 @@ const appendHeading = (
 
   const clonedHeading = layout.clone(heading);
 
-  if (!nextBlock) {
-    if (layout.tryAppend(clonedHeading)) return;
-
-    if (!pageWasEmpty) {
-      layout.newPage();
-    }
-
-    layout.forceAppend(clonedHeading);
+  if (nextBlock && (isImageBlock(nextBlock) || isCallout(nextBlock))) {
+    appendHeadingOnly(clonedHeading, pageWasEmpty, layout);
     return;
   }
 
-  const clonedNext = layout.clone(nextBlock);
+  if (!nextBlock) {
+    appendHeadingOnly(clonedHeading, pageWasEmpty, layout);
+    return;
+  }
+
+  const clonedNext = cloneKeepWithNextBlock(nextBlock, layout);
 
   layout.forceAppend(clonedHeading);
   layout.forceAppend(clonedNext);
@@ -54,4 +55,37 @@ const appendHeading = (
   }
 
   layout.forceAppend(layout.clone(heading));
+};
+
+const appendHeadingOnly = (
+  heading: HTMLElement,
+  pageWasEmpty: boolean,
+  layout: PageLayout,
+) => {
+  if (layout.tryAppend(heading)) return;
+
+  if (!pageWasEmpty) {
+    layout.newPage();
+  }
+
+  layout.forceAppend(heading);
+};
+
+const cloneKeepWithNextBlock = (block: HTMLElement, layout: PageLayout): HTMLElement => {
+  if (!isList(block)) {
+    return layout.clone(block);
+  }
+
+  const firstItem = block.firstElementChild;
+  const list = block.cloneNode(false) as HTMLElement;
+
+  if (firstItem) {
+    list.appendChild(layout.clone(firstItem as HTMLElement));
+  }
+
+  return list;
+};
+
+const isCallout = (block: HTMLElement): boolean => {
+  return block.classList.contains('callout');
 };

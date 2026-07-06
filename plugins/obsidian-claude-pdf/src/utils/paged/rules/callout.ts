@@ -1,6 +1,8 @@
 import type { PaginationRule } from '.';
 import type { PageLayout } from '../types';
+import { appendImageBlockInto, isImageBlock } from './image';
 import { appendListChildren, isList } from './list';
+import { appendTableChildren, isTable } from './table';
 export const calloutRule: PaginationRule = {
   name: 'callout',
   match: block => block.classList.contains('callout'),
@@ -31,27 +33,65 @@ const appendCallout = (callout: HTMLElement, layout: PageLayout) => {
   layout.forceAppend(currentCallout);
 
   for (const node of nodes) {
-    if (node instanceof HTMLElement && isList(node)) {
+    if (!(node instanceof HTMLElement)) {
+      const result = appendNodeIntoCallout({
+        node,
+        layout,
+        callout,
+        title,
+        currentCallout,
+        currentContent,
+      });
+
+      currentCallout = result.currentCallout;
+      currentContent = result.currentContent;
+      continue;
+    }
+
+    const onNewPage = () => {
+      if (!hasMeaningfulChildNodes(currentContent)) {
+        currentCallout.remove();
+      }
+
+      layout.newPage();
+
+      currentCallout = createEmptyCallout(callout, title);
+      currentContent = getCalloutContent(currentCallout);
+
+      layout.forceAppend(currentCallout);
+
+      return currentContent;
+    };
+
+    if (isList(node)) {
       appendListChildren({
         list: node,
         layout,
 
         appendTo: () => currentContent,
+        onNewPage,
+      });
 
-        onNewPage: () => {
-          if (!hasMeaningfulChildNodes(currentContent)) {
-            currentCallout.remove();
-          }
+      continue;
+    }
 
-          layout.newPage();
+    if (isTable(node)) {
+      appendTableChildren({
+        table: node,
+        layout,
+        appendTo: () => currentContent,
+        onNewPage,
+      });
 
-          currentCallout = createEmptyCallout(callout, title);
-          currentContent = getCalloutContent(currentCallout);
+      continue;
+    }
 
-          layout.forceAppend(currentCallout);
-
-          return currentContent;
-        },
+    if (isImageBlock(node)) {
+      appendImageBlockInto({
+        block: node,
+        layout,
+        appendTo: () => currentContent,
+        onNewPage,
       });
 
       continue;
