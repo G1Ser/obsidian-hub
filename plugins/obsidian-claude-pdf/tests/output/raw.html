@@ -1605,54 +1605,11 @@ kbd {
 </head>
 <body>
   <article id="source" class="claude-root">
-<h1>Claude PDF Export Test</h1>
-<div class="callout" style="--callout-color: 8, 109, 221" data-callout="info">
-  <div class="callout-title">
-    <div class="callout-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></svg></div>
-    <div class="callout-title-inner">Info</div>
-  </div>
-  <div class="callout-content"><p>这是一个完整的 Markdown / Obsidian 测试文档。</p>
-<p>用于验证：</p>
+<hr>
+<p>tags:</p>
 <ul>
-<li><p>Typography</p>
-</li>
-<li><p>Lists</p>
-</li>
-<li><p>Task Lists</p>
-</li>
-<li><p>Tables</p>
-</li>
-<li><p>Code Blocks</p>
-</li>
-<li><p>Math (KaTeX)</p>
-</li>
-<li><p>Images</p>
-</li>
-<li><p>Callouts</p>
-</li>
-<li><p>Footnotes</p>
-</li>
-<li><p>HTML</p>
-</li>
-<li><p>Mermaid</p>
-</li>
-<li><p>Links</p>
-</li>
-<li><p>Tags</p>
-</li>
-<li><p>Internal Links</p>
-</li>
-<li><p>Embeds</p>
-</li>
-<li><p>Definition Lists</p>
-</li>
-<li><p>Emoji</p>
-</li>
-<li><p>Blockquotes</p>
-</li>
-<li><p>Horizontal Rules</p>
-</div>
-</div></li>
+<li>style</li>
+<li>test</li>
 </ul>
 <hr>
 <h1>Heading 1</h1>
@@ -1663,11 +1620,11 @@ kbd {
 <p>这是 <em>Italic</em>。</p>
 <p>这是 <em><strong>Bold Italic</strong></em>。</p>
 <p>这是 <del>Strikethrough</del>。</p>
-<p>这是 <mark>Highlight Test</mark>。</p>
+<p>这是 <mark>Highlight</mark>。</p>
 <p>这是 <code>Inline Code</code>。</p>
 <p>这是一个 Emoji 😀🚀🎉</p>
-<p>这是一个 <a class="internal-link" href="Test Link">Test Link</a></p>
-<p>这是一个 <a class="internal-link" href="Page#Heading">Page → Heading</a></p>
+<p>这是一个 <a href="README.md">README</a></p>
+<p>这是一个 <a href="#Footnote">Footnote</a></p>
 <p>这是一个 <a href="https://openai.com">OpenAI</a></p>
 <p>这是一个自动链接：</p>
 <p><a href="https://github.com">https://github.com</a></p>
@@ -1789,47 +1746,45 @@ kbd {
 <h1>Horizontal Rule</h1>
 <hr>
 <hr>
-<h1>Picture</h1>
-<p><img src="https://picsum.photos/800/400?blur=3" alt="Random Picture"></p>
 <hr>
 <h1>Code</h1>
 <h2>TypeScript</h2>
 <pre class="shiki github-light-default" style="background-color:#ffffff;color:#1f2328" tabindex="0"><code><span class="line"><span style="color:#CF222E">interface</span><span style="color:#953800"> User</span><span style="color:#1F2328"> {</span></span>
-<span class="line"><span style="color:#953800">  id</span><span style="color:#CF222E">:</span><span style="color:#0550AE"> number</span><span style="color:#1F2328">;</span></span>
-<span class="line"><span style="color:#953800">  name</span><span style="color:#CF222E">:</span><span style="color:#0550AE"> string</span><span style="color:#1F2328">;</span></span>
+<span class="line"><span style="color:#953800">    id</span><span style="color:#CF222E">:</span><span style="color:#0550AE"> number</span><span style="color:#1F2328">;</span></span>
+<span class="line"><span style="color:#953800">    name</span><span style="color:#CF222E">:</span><span style="color:#0550AE"> string</span><span style="color:#1F2328">;</span></span>
 <span class="line"><span style="color:#1F2328">}</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#CF222E">const</span><span style="color:#0550AE"> user</span><span style="color:#CF222E">:</span><span style="color:#953800"> User</span><span style="color:#CF222E"> =</span><span style="color:#1F2328"> {</span></span>
-<span class="line"><span style="color:#1F2328">  id: </span><span style="color:#0550AE">1</span><span style="color:#1F2328">,</span></span>
-<span class="line"><span style="color:#1F2328">  name: </span><span style="color:#0A3069">'Claude'</span><span style="color:#1F2328">,</span></span>
+<span class="line"><span style="color:#1F2328">    id: </span><span style="color:#0550AE">1</span><span style="color:#1F2328">,</span></span>
+<span class="line"><span style="color:#1F2328">    name: </span><span style="color:#0A3069">"Claude"</span></span>
 <span class="line"><span style="color:#1F2328">};</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#CF222E">function</span><span style="color:#8250DF"> hello</span><span style="color:#1F2328">(</span><span style="color:#953800">name</span><span style="color:#CF222E">:</span><span style="color:#0550AE"> string</span><span style="color:#1F2328">) {</span></span>
-<span class="line"><span style="color:#1F2328">  console.</span><span style="color:#8250DF">log</span><span style="color:#1F2328">(</span><span style="color:#0A3069">`Hello ${</span><span style="color:#1F2328">name</span><span style="color:#0A3069">}`</span><span style="color:#1F2328">);</span></span>
+<span class="line"><span style="color:#1F2328">    console.</span><span style="color:#8250DF">log</span><span style="color:#1F2328">(</span><span style="color:#0A3069">`Hello ${</span><span style="color:#1F2328">name</span><span style="color:#0A3069">}`</span><span style="color:#1F2328">);</span></span>
 <span class="line"><span style="color:#1F2328">}</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#8250DF">hello</span><span style="color:#1F2328">(user.name);</span></span>
 <span class="line"></span></code></pre>
 <h2>JSON</h2>
 <pre class="shiki github-light-default" style="background-color:#ffffff;color:#1f2328" tabindex="0"><code><span class="line"><span style="color:#1F2328">{</span></span>
-<span class="line"><span style="color:#116329">  "name"</span><span style="color:#1F2328">: </span><span style="color:#0A3069">"Claude PDF"</span><span style="color:#1F2328">,</span></span>
-<span class="line"><span style="color:#116329">  "version"</span><span style="color:#1F2328">: </span><span style="color:#0A3069">"1.0.0"</span><span style="color:#1F2328">,</span></span>
-<span class="line"><span style="color:#116329">  "theme"</span><span style="color:#1F2328">: </span><span style="color:#0A3069">"Minimal"</span></span>
+<span class="line"><span style="color:#116329">    "name"</span><span style="color:#1F2328">: </span><span style="color:#0A3069">"Claude PDF"</span><span style="color:#1F2328">,</span></span>
+<span class="line"><span style="color:#116329">    "version"</span><span style="color:#1F2328">: </span><span style="color:#0A3069">"1.0.0"</span><span style="color:#1F2328">,</span></span>
+<span class="line"><span style="color:#116329">    "theme"</span><span style="color:#1F2328">: </span><span style="color:#0A3069">"Minimal"</span></span>
 <span class="line"><span style="color:#1F2328">}</span></span>
 <span class="line"></span></code></pre>
 <h2>CSS</h2>
 <pre class="shiki github-light-default" style="background-color:#ffffff;color:#1f2328" tabindex="0"><code><span class="line"><span style="color:#116329">body</span><span style="color:#1F2328"> {</span></span>
-<span class="line"><span style="color:#0550AE">  background</span><span style="color:#1F2328">: </span><span style="color:#0550AE">#faf9f5</span><span style="color:#1F2328">;</span></span>
-<span class="line"><span style="color:#0550AE">  color</span><span style="color:#1F2328">: </span><span style="color:#0550AE">#141413</span><span style="color:#1F2328">;</span></span>
+<span class="line"><span style="color:#0550AE">    background</span><span style="color:#1F2328">: </span><span style="color:#0550AE">#faf9f5</span><span style="color:#1F2328">;</span></span>
+<span class="line"><span style="color:#0550AE">    color</span><span style="color:#1F2328">: </span><span style="color:#0550AE">#141413</span><span style="color:#1F2328">;</span></span>
 <span class="line"><span style="color:#1F2328">}</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#116329">h1</span><span style="color:#1F2328"> {</span></span>
-<span class="line"><span style="color:#0550AE">  font-size</span><span style="color:#1F2328">: </span><span style="color:#0550AE">2</span><span style="color:#CF222E">rem</span><span style="color:#1F2328">;</span></span>
+<span class="line"><span style="color:#0550AE">    font-size</span><span style="color:#1F2328">: </span><span style="color:#0550AE">2</span><span style="color:#CF222E">rem</span><span style="color:#1F2328">;</span></span>
 <span class="line"><span style="color:#1F2328">}</span></span>
 <span class="line"></span></code></pre>
 <h2>HTML</h2>
 <pre class="shiki github-light-default" style="background-color:#ffffff;color:#1f2328" tabindex="0"><code><span class="line"><span style="color:#1F2328">&#x3C;</span><span style="color:#116329">div</span><span style="color:#0550AE"> class</span><span style="color:#1F2328">=</span><span style="color:#0A3069">"card"</span><span style="color:#1F2328">></span></span>
-<span class="line"><span style="color:#1F2328">  &#x3C;</span><span style="color:#116329">h2</span><span style="color:#1F2328">>Hello&#x3C;/</span><span style="color:#116329">h2</span><span style="color:#1F2328">></span></span>
+<span class="line"><span style="color:#1F2328">    &#x3C;</span><span style="color:#116329">h2</span><span style="color:#1F2328">>Hello&#x3C;/</span><span style="color:#116329">h2</span><span style="color:#1F2328">></span></span>
 <span class="line"><span style="color:#1F2328">&#x3C;/</span><span style="color:#116329">div</span><span style="color:#1F2328">></span></span>
 <span class="line"></span></code></pre>
 <h2>Bash</h2>
@@ -1899,6 +1854,10 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
 <p>求和：</p>
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>100</mn></munderover><mi>i</mi><mo>=</mo><mfrac><mrow><mn>100</mn><mo>×</mo><mn>101</mn></mrow><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\sum_{i=1}^{100}i=\frac{100\times101}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.0788em;vertical-align:-1.2777em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8011em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">100</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2777em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">100</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">101</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
 <hr>
+<h1>Image</h1>
+<p><img src="https://picsum.photos/2000/200" alt="V Image">
+<img src="https://picsum.photos/650/1000" alt="V Image"></p>
+<hr>
 <h1>HTML</h1>
 <p><kbd>Ctrl</kbd> + <kbd>S</kbd></p>
 <p><mark>HTML Highlight</mark></p>
@@ -1906,7 +1865,8 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
 <p><u>a</u></p>
 <p><sup>2</sup></p>
 <p><s>Test S</s></p>
-<!-- <abbr>Test Abbr</abbr> --><hr>
+<p><abbr>Test Abbr</abbr></p>
+<hr>
 <h1>Footnote</h1>
 <p>这里有一个脚注。<sup><a id="footnote-ref-1" href="#footnote-1" data-footnote-ref aria-describedby="footnote-label">1</a></sup></p>
 <p>还有第二个。<sup><a id="footnote-ref-long" href="#footnote-long" data-footnote-ref aria-describedby="footnote-label">2</a></sup></p>
@@ -1937,8 +1897,8 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
 <li><input checked="" disabled="" type="checkbox"> Formula</li>
 <li><input disabled="" type="checkbox"> Mermaid</li>
 </ul>
-<pre class="shiki github-light-default" style="background-color:#ffffff;color:#1f2328" tabindex="0"><code><span class="line"><span style="color:#CF222E">export</span><span style="color:#CF222E"> function</span><span style="color:#8250DF"> add</span><span style="color:#1F2328">(</span><span style="color:#953800">a</span><span style="color:#CF222E">:</span><span style="color:#0550AE"> number</span><span style="color:#1F2328">, </span><span style="color:#953800">b</span><span style="color:#CF222E">:</span><span style="color:#0550AE"> number</span><span style="color:#1F2328">) {</span></span>
-<span class="line"><span style="color:#CF222E">  return</span><span style="color:#1F2328"> a </span><span style="color:#CF222E">+</span><span style="color:#1F2328"> b;</span></span>
+<pre class="shiki github-light-default" style="background-color:#ffffff;color:#1f2328" tabindex="0"><code><span class="line"><span style="color:#CF222E">export</span><span style="color:#CF222E"> function</span><span style="color:#8250DF"> add</span><span style="color:#1F2328">(</span><span style="color:#953800">a</span><span style="color:#CF222E">:</span><span style="color:#0550AE">number</span><span style="color:#1F2328">,</span><span style="color:#953800">b</span><span style="color:#CF222E">:</span><span style="color:#0550AE">number</span><span style="color:#1F2328">){</span></span>
+<span class="line"><span style="color:#CF222E">    return</span><span style="color:#1F2328"> a</span><span style="color:#CF222E">+</span><span style="color:#1F2328">b;</span></span>
 <span class="line"><span style="color:#1F2328">}</span></span>
 <span class="line"></span></code></pre>
 <p>行内公式：</p>
@@ -1957,30 +1917,6 @@ B --&gt; C[Playwright]
 C --&gt; D[PDF]
 </pre>
 <hr>
-<h1>Long Paragraph</h1>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.</p>
-<p>Vivamus fermentum semper porta. Nunc diam velit, adipiscing ut tristique vitae, sagittis vel odio. Maecenas convallis ullamcorper ultricies.</p>
-<hr>
-<h1>Checklist</h1>
-<ul>
-<li><input disabled="" type="checkbox"> Heading</li>
-<li><input disabled="" type="checkbox"> Paragraph</li>
-<li><input disabled="" type="checkbox"> Quote</li>
-<li><input disabled="" type="checkbox"> Callout</li>
-<li><input disabled="" type="checkbox"> Table</li>
-<li><input disabled="" type="checkbox"> Formula</li>
-<li><input disabled="" type="checkbox"> Image</li>
-<li><input disabled="" type="checkbox"> Code</li>
-<li><input disabled="" type="checkbox"> Mermaid</li>
-<li><input disabled="" type="checkbox"> HTML</li>
-<li><input disabled="" type="checkbox"> Footnote</li>
-<li><input disabled="" type="checkbox"> Definition List</li>
-<li><input disabled="" type="checkbox"> Embed</li>
-<li><input disabled="" type="checkbox"> Internal Link</li>
-<li><input disabled="" type="checkbox"> External Link</li>
-<li><input disabled="" type="checkbox"> Emoji</li>
-</ul>
-<hr>
 <h1>End</h1>
 <div class="callout" style="--callout-color: 8, 185, 78" data-callout="success">
   <div class="callout-title">
@@ -1989,8 +1925,7 @@ C --&gt; D[PDF]
   </div>
   <div class="callout-content"><p>🎉 如果以上内容都正确显示，那么你的 PDF 导出已经覆盖了绝大多数 Markdown 与 Obsidian 场景。</p>
   </div>
-</div>
-<section class="footnotes" data-footnotes>
+</div><section class="footnotes" data-footnotes>
 <h2 id="footnote-label" class="sr-only">Footnotes</h2>
 <ol>
 <li id="footnote-1">

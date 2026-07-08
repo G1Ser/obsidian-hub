@@ -23,7 +23,7 @@ const loadCss = async (path: string, prefix?: string) => {
 };
 
 const CLAUDE_CLASS = '.claude-root';
-const md = fs.readFileSync('tests/测试导出.md', 'utf8');
+const md = fs.readFileSync('tests/Claude Style文档.md', 'utf8');
 const mermaidConfig = {
   startOnLoad: true,
   theme: 'base',

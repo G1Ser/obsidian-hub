@@ -38,6 +38,21 @@
       svg.replaceWith(img);
     }
   };
+  var waitForImages = async () => {
+    const images = Array.from(document.images);
+    await Promise.all(
+      images.map(
+        (img) => new Promise((resolve) => {
+          if (img.complete) {
+            resolve();
+            return;
+          }
+          img.addEventListener("load", () => resolve(), { once: true });
+          img.addEventListener("error", () => resolve(), { once: true });
+        })
+      )
+    );
+  };
   var prepareDocument = async () => {
     await document.fonts.ready;
     const win = window;
@@ -45,6 +60,7 @@
       await win.mermaid.run();
       convertMermaidSvgToImg();
     }
+    await waitForImages();
   };
 
   // src/utils/paged/normalize.ts
@@ -161,106 +177,101 @@ body {
     }
   };
 
-  // src/utils/paged/rules/heading.ts
-  var HEADING_SELECTOR = "h1,h2,h3,h4,h5,h6";
-  var headingRule = {
-    name: "heading",
-    match: (block) => block.matches(HEADING_SELECTOR),
-    apply: ({ block, nextBlock, layout }) => {
-      appendHeading(block, nextBlock, layout);
-    }
-  };
-  var appendHeading = (heading, nextBlock, layout) => {
-    const pageWasEmpty = layout.currentPage.children.length === 0;
-    const clonedHeading = layout.clone(heading);
-    if (!nextBlock) {
-      if (layout.tryAppend(clonedHeading)) return;
-      if (!pageWasEmpty) {
-        layout.newPage();
-      }
-      layout.forceAppend(clonedHeading);
-      return;
-    }
-    const clonedNext = layout.clone(nextBlock);
-    layout.forceAppend(clonedHeading);
-    layout.forceAppend(clonedNext);
-    const overflow = layout.isOverflow();
-    clonedNext.remove();
-    if (!overflow) {
-      return;
-    }
-    clonedHeading.remove();
-    if (!pageWasEmpty) {
-      layout.newPage();
-    }
-    layout.forceAppend(layout.clone(heading));
-  };
-
   // src/utils/paged/rules/image.ts
+  var MIN_REMAINING_HEIGHT_FOR_SCALE = 350;
+  var MIN_SCALED_IMAGE_HEIGHT = 120;
+  var IMAGE_HEIGHT_STEP = 24;
   var imageRule = {
     name: "image",
-    match: (block) => block.tagName.toLowerCase() === "img",
+    match: (block) => isImageBlock(block),
     apply: ({ block, layout }) => {
-      const img = layout.clone(block);
-      if (layout.tryAppend(img)) {
-        return;
-      }
-      layout.newPage();
-      layout.forceAppend(img);
+      appendImageBlock(block, layout);
     }
   };
-
-  // src/utils/paged/rules/table.ts
-  var tableRule = {
-    name: "table",
-    match: (block) => block.tagName.toLowerCase() === "table",
-    apply: ({ block, layout }) => {
-      const rows = Array.from(block.querySelectorAll("tbody > tr"));
-      if (!rows.length) {
-        const cloned = layout.clone(block);
-        if (layout.tryAppend(cloned)) {
-          return;
-        }
+  var isImageBlock = (block) => {
+    if (block.tagName.toLowerCase() === "img") {
+      return true;
+    }
+    if (block.tagName.toLowerCase() !== "p") {
+      return false;
+    }
+    const meaningfulChildren = Array.from(block.childNodes).filter((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        return Boolean(node.textContent?.trim());
+      }
+      return node.nodeName.toLowerCase() !== "br";
+    });
+    return meaningfulChildren.length > 0 && meaningfulChildren.every(isImageNode);
+  };
+  var appendImageBlock = (block, layout) => {
+    appendImageBlockInto({
+      block,
+      layout,
+      appendTo: () => layout.currentContainer,
+      onNewPage: () => {
         layout.newPage();
-        layout.forceAppend(cloned);
-        return;
+        return layout.currentContainer;
       }
-      let currentTable = createEmptyTable(block);
-      let currentTbody = getTbody(currentTable);
-      layout.forceAppend(currentTable);
-      for (const row of rows) {
-        const clonedRow = layout.clone(row);
-        currentTbody.appendChild(clonedRow);
-        if (!layout.isOverflow()) {
-          continue;
-        }
-        clonedRow.remove();
-        if (!currentTbody.children.length) {
-          currentTable.remove();
-        }
-        layout.newPage();
-        currentTable = createEmptyTable(block);
-        currentTbody = getTbody(currentTable);
-        currentTbody.appendChild(clonedRow);
-        layout.forceAppend(currentTable);
+    });
+  };
+  var appendImageBlockInto = ({
+    block,
+    layout,
+    appendTo,
+    onNewPage
+  }) => {
+    const cloned = layout.clone(block);
+    appendTo().appendChild(cloned);
+    if (!layout.isOverflow()) {
+      return;
+    }
+    cloned.remove();
+    if (tryAppendScaledImageBlock({ block, layout, appendTo })) {
+      return;
+    }
+    onNewPage().appendChild(layout.clone(block));
+  };
+  var isImageNode = (node) => {
+    return node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === "img";
+  };
+  var tryAppendScaledImageBlock = ({
+    block,
+    layout,
+    appendTo
+  }) => {
+    const availableHeight = getCurrentPageRemainingHeight(layout);
+    if (availableHeight < MIN_REMAINING_HEIGHT_FOR_SCALE) {
+      return false;
+    }
+    for (let maxHeight = Math.floor(availableHeight); maxHeight >= MIN_SCALED_IMAGE_HEIGHT; maxHeight -= IMAGE_HEIGHT_STEP) {
+      const cloned = layout.clone(block);
+      fitImagesToHeight(cloned, maxHeight);
+      appendTo().appendChild(cloned);
+      if (!layout.isOverflow()) {
+        return true;
       }
+      cloned.remove();
+    }
+    return false;
+  };
+  var fitImagesToHeight = (block, maxHeight) => {
+    const images = block.tagName.toLowerCase() === "img" ? [block] : Array.from(block.querySelectorAll("img"));
+    for (const img of images) {
+      img.style.width = "100%";
+      img.style.maxHeight = `${maxHeight}px`;
+      img.style.objectFit = "contain";
     }
   };
-  var createEmptyTable = (table) => {
-    const next = table.cloneNode(false);
-    const colgroup = table.querySelector("colgroup");
-    if (colgroup) {
-      next.appendChild(colgroup.cloneNode(true));
-    }
-    const thead = table.querySelector("thead");
-    if (thead) {
-      next.appendChild(thead.cloneNode(true));
-    }
-    next.appendChild(document.createElement("tbody"));
-    return next;
-  };
-  var getTbody = (table) => {
-    return table.querySelector("tbody");
+  var getCurrentPageRemainingHeight = (layout) => {
+    const pageRect = layout.currentPage.getBoundingClientRect();
+    const styles = window.getComputedStyle(layout.currentPage);
+    const paddingTop = Number.parseFloat(styles.paddingTop) || 0;
+    const paddingBottom = Number.parseFloat(styles.paddingBottom) || 0;
+    const lastChild = layout.currentPage.lastElementChild;
+    const contentTop = pageRect.top + paddingTop;
+    const contentBottom = pageRect.bottom - paddingBottom;
+    const usedBottom = lastChild ? lastChild.getBoundingClientRect().bottom : contentTop;
+    return Math.max(0, contentBottom - usedBottom);
   };
 
   // src/utils/paged/rules/list.ts
@@ -334,6 +345,136 @@ body {
     return list.cloneNode(false);
   };
 
+  // src/utils/paged/rules/heading.ts
+  var HEADING_SELECTOR = "h1,h2,h3,h4,h5,h6";
+  var headingRule = {
+    name: "heading",
+    match: (block) => block.matches(HEADING_SELECTOR),
+    apply: ({ block, nextBlock, layout }) => {
+      appendHeading(block, nextBlock, layout);
+    }
+  };
+  var appendHeading = (heading, nextBlock, layout) => {
+    const pageWasEmpty = layout.currentPage.children.length === 0;
+    const clonedHeading = layout.clone(heading);
+    if (nextBlock && (isImageBlock(nextBlock) || isCallout(nextBlock))) {
+      appendHeadingOnly(clonedHeading, pageWasEmpty, layout);
+      return;
+    }
+    if (!nextBlock) {
+      appendHeadingOnly(clonedHeading, pageWasEmpty, layout);
+      return;
+    }
+    const clonedNext = cloneKeepWithNextBlock(nextBlock, layout);
+    layout.forceAppend(clonedHeading);
+    layout.forceAppend(clonedNext);
+    const overflow = layout.isOverflow();
+    clonedNext.remove();
+    if (!overflow) {
+      return;
+    }
+    clonedHeading.remove();
+    if (!pageWasEmpty) {
+      layout.newPage();
+    }
+    layout.forceAppend(layout.clone(heading));
+  };
+  var appendHeadingOnly = (heading, pageWasEmpty, layout) => {
+    if (layout.tryAppend(heading)) return;
+    if (!pageWasEmpty) {
+      layout.newPage();
+    }
+    layout.forceAppend(heading);
+  };
+  var cloneKeepWithNextBlock = (block, layout) => {
+    if (!isList(block)) {
+      return layout.clone(block);
+    }
+    const firstItem = block.firstElementChild;
+    const list = block.cloneNode(false);
+    if (firstItem) {
+      list.appendChild(layout.clone(firstItem));
+    }
+    return list;
+  };
+  var isCallout = (block) => {
+    return block.classList.contains("callout");
+  };
+
+  // src/utils/paged/rules/table.ts
+  var tableRule = {
+    name: "table",
+    match: (block) => isTable(block),
+    apply: ({ block, layout }) => {
+      appendTable(block, layout);
+    }
+  };
+  var appendTable = (table, layout) => {
+    appendTableChildren({
+      table,
+      layout,
+      appendTo: () => layout.currentContainer,
+      onNewPage: () => {
+        layout.newPage();
+        return layout.currentContainer;
+      }
+    });
+  };
+  var appendTableChildren = ({
+    table,
+    layout,
+    appendTo,
+    onNewPage
+  }) => {
+    const rows = Array.from(table.querySelectorAll("tbody > tr"));
+    if (!rows.length) {
+      const cloned = layout.clone(table);
+      appendTo().appendChild(cloned);
+      if (!layout.isOverflow()) {
+        return;
+      }
+      cloned.remove();
+      onNewPage().appendChild(cloned);
+      return;
+    }
+    let currentTable = createEmptyTable(table);
+    let currentTbody = getTbody(currentTable);
+    appendTo().appendChild(currentTable);
+    for (const row of rows) {
+      const clonedRow = layout.clone(row);
+      currentTbody.appendChild(clonedRow);
+      if (!layout.isOverflow()) {
+        continue;
+      }
+      clonedRow.remove();
+      if (!currentTbody.children.length) {
+        currentTable.remove();
+      }
+      const nextContainer = onNewPage();
+      currentTable = createEmptyTable(table);
+      currentTbody = getTbody(currentTable);
+      currentTbody.appendChild(clonedRow);
+      nextContainer.appendChild(currentTable);
+    }
+  };
+  var isTable = (block) => block.tagName.toLowerCase() === "table";
+  var createEmptyTable = (table) => {
+    const next = table.cloneNode(false);
+    const colgroup = table.querySelector("colgroup");
+    if (colgroup) {
+      next.appendChild(colgroup.cloneNode(true));
+    }
+    const thead = table.querySelector("thead");
+    if (thead) {
+      next.appendChild(thead.cloneNode(true));
+    }
+    next.appendChild(document.createElement("tbody"));
+    return next;
+  };
+  var getTbody = (table) => {
+    return table.querySelector("tbody");
+  };
+
   // src/utils/paged/rules/callout.ts
   var calloutRule = {
     name: "callout",
@@ -358,21 +499,53 @@ body {
     let currentContent = getCalloutContent(currentCallout);
     layout.forceAppend(currentCallout);
     for (const node of nodes) {
-      if (node instanceof HTMLElement && isList(node)) {
+      if (!(node instanceof HTMLElement)) {
+        const result2 = appendNodeIntoCallout({
+          node,
+          layout,
+          callout,
+          title,
+          currentCallout,
+          currentContent
+        });
+        currentCallout = result2.currentCallout;
+        currentContent = result2.currentContent;
+        continue;
+      }
+      const onNewPage = () => {
+        if (!hasMeaningfulChildNodes(currentContent)) {
+          currentCallout.remove();
+        }
+        layout.newPage();
+        currentCallout = createEmptyCallout(callout, title);
+        currentContent = getCalloutContent(currentCallout);
+        layout.forceAppend(currentCallout);
+        return currentContent;
+      };
+      if (isList(node)) {
         appendListChildren({
           list: node,
           layout,
           appendTo: () => currentContent,
-          onNewPage: () => {
-            if (!hasMeaningfulChildNodes(currentContent)) {
-              currentCallout.remove();
-            }
-            layout.newPage();
-            currentCallout = createEmptyCallout(callout, title);
-            currentContent = getCalloutContent(currentCallout);
-            layout.forceAppend(currentCallout);
-            return currentContent;
-          }
+          onNewPage
+        });
+        continue;
+      }
+      if (isTable(node)) {
+        appendTableChildren({
+          table: node,
+          layout,
+          appendTo: () => currentContent,
+          onNewPage
+        });
+        continue;
+      }
+      if (isImageBlock(node)) {
+        appendImageBlockInto({
+          block: node,
+          layout,
+          appendTo: () => currentContent,
+          onNewPage
         });
         continue;
       }

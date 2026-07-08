@@ -1,32 +1,8 @@
-# Claude PDF Export Test
-
-> [!info]
-> 这是一个完整的 Markdown / Obsidian 测试文档。
->
-> 用于验证：
->
-> - Typography
-> - Lists
-> - Task Lists
-> - Tables
-> - Code Blocks
-> - Math (KaTeX)
-> - Images
-> - Callouts
-> - Footnotes
-> - HTML
-> - Mermaid
-> - Links
-> - Tags
-> - Internal Links
-> - Embeds
-> - Definition Lists
-> - Emoji
-> - Blockquotes
-> - Horizontal Rules
-
 ---
-
+tags:
+  - style
+  - test
+---
 # Heading 1
 
 正文测试。
@@ -37,21 +13,21 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant m
 
 这是 **Bold**。
 
-这是 _Italic_。
+这是 *Italic*。
 
-这是 _**Bold Italic**_。
+这是 ***Bold Italic***。
 
 这是 ~~Strikethrough~~。
 
-这是 ==Highlight Test==。
+这是 ==Highlight==。
 
 这是 `Inline Code`。
 
 这是一个 Emoji 😀🚀🎉
 
-这是一个 [[Test Link]]
+这是一个 [README](README.md)
 
-这是一个 [[Page#Heading]]
+这是一个 [Footnote](#Footnote)
 
 这是一个 [OpenAI](https://openai.com)
 
@@ -68,9 +44,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant m
 - Apple
 - Banana
 - Orange
-  - Orange 1
-  - Orange 2
-    - Orange 2-1
+    - Orange 1
+    - Orange 2
+        - Orange 2-1
 - Watermelon
 
 ---
@@ -80,9 +56,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant m
 1. 第一项
 2. 第二项
 3. 第三项
-   1. 子项
-   2. 子项
-      1. 更深一级
+    1. 子项
+    2. 子项
+        1. 更深一级
 
 ---
 
@@ -91,10 +67,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant m
 - [ ] 未完成
 - [x] 已完成
 - [ ] PDF 导出
-  - [x] Markdown
-  - [x] Code
-  - [x] Formula
-  - [ ] Mermaid
+    - [x] Markdown
+    - [x] Code
+    - [x] Formula
+    - [ ] Mermaid
 - [ ] 发布插件
 
 ---
@@ -105,9 +81,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant m
 >
 > 第二行
 >
-> > 二级引用
-> >
-> > > 三级引用
+>> 二级引用
+>>
+>>> 三级引用
 
 ---
 
@@ -145,10 +121,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant m
 
 ---
 
-# Picture
-
-![Random Picture](https://picsum.photos/800/400?blur=3)
-
 ---
 
 # Code
@@ -157,17 +129,17 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant m
 
 ```ts
 interface User {
-  id: number;
-  name: string;
+    id: number;
+    name: string;
 }
 
 const user: User = {
-  id: 1,
-  name: 'Claude',
+    id: 1,
+    name: "Claude"
 };
 
 function hello(name: string) {
-  console.log(`Hello ${name}`);
+    console.log(`Hello ${name}`);
 }
 
 hello(user.name);
@@ -177,9 +149,9 @@ hello(user.name);
 
 ```json
 {
-  "name": "Claude PDF",
-  "version": "1.0.0",
-  "theme": "Minimal"
+    "name": "Claude PDF",
+    "version": "1.0.0",
+    "theme": "Minimal"
 }
 ```
 
@@ -187,12 +159,12 @@ hello(user.name);
 
 ```css
 body {
-  background: #faf9f5;
-  color: #141413;
+    background: #faf9f5;
+    color: #141413;
 }
 
 h1 {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 ```
 
@@ -200,7 +172,7 @@ h1 {
 
 ```html
 <div class="card">
-  <h2>Hello</h2>
+    <h2>Hello</h2>
 </div>
 ```
 
@@ -225,10 +197,10 @@ pnpm test
 
 # Table
 
-| Name       | Language   |      Stars |
-| ---------- | ---------- | ---------: |
+| Name       | Language   | Stars |
+| ---------- | ---------- | ----: |
 | Obsidian   | TypeScript | ⭐⭐⭐⭐⭐ |
-| Claude PDF | TypeScript |   ⭐⭐⭐⭐ |
+| Claude PDF | TypeScript |  ⭐⭐⭐⭐ |
 | KaTeX      | JavaScript | ⭐⭐⭐⭐⭐ |
 
 ---
@@ -274,6 +246,12 @@ $$
 
 ---
 
+# Image
+![V Image](https://picsum.photos/2000/200)
+![V Image](https://picsum.photos/650/1000)
+
+---
+
 # HTML
 
 <kbd>Ctrl</kbd> + <kbd>S</kbd>
@@ -288,7 +266,7 @@ $$
 
 <s>Test S</s>
 
-<!-- <abbr>Test Abbr</abbr> -->
+<abbr>Test Abbr</abbr>
 
 ---
 
@@ -338,8 +316,8 @@ KaTeX
 > - [ ] Mermaid
 >
 > ```ts
-> export function add(a: number, b: number) {
->   return a + b;
+> export function add(a:number,b:number){
+>     return a+b;
 > }
 > ```
 >
@@ -367,34 +345,6 @@ B --> C[Playwright]
 C --> D[PDF]
 ```
 
----
-
-# Long Paragraph
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.
-
-Vivamus fermentum semper porta. Nunc diam velit, adipiscing ut tristique vitae, sagittis vel odio. Maecenas convallis ullamcorper ultricies.
-
----
-
-# Checklist
-
-- [ ] Heading
-- [ ] Paragraph
-- [ ] Quote
-- [ ] Callout
-- [ ] Table
-- [ ] Formula
-- [ ] Image
-- [ ] Code
-- [ ] Mermaid
-- [ ] HTML
-- [ ] Footnote
-- [ ] Definition List
-- [ ] Embed
-- [ ] Internal Link
-- [ ] External Link
-- [ ] Emoji
 
 ---
 
