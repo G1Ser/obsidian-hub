@@ -232,23 +232,34 @@ table {
   font-size: 1em;
 }
 
-th {
-  border-bottom: 1px solid rgba(31, 30, 29, 0.6);
-  font-weight: 700;
-  text-align: left;
+table th,
+table td {
+  border: none;
+  text-align: center;
+  vertical-align: middle;
   padding: 0.6rem 0.8rem 0.6rem 0.2rem;
+}
+
+table thead {
+  font-weight: 700;
   color: var(--claude-heading);
 }
 
-td {
+table thead tr,
+table tbody tr {
   border-bottom: 0.5px solid var(--claude-border);
-  padding: 0.6rem 0.8rem 0.6rem 0.2rem;
-  text-align: left;
-  vertical-align: top;
 }
 
-tr:last-child td {
-  border-bottom: 1px solid var(--claude-border);
+table thead tr:first-child {
+  border-top: 1px solid rgba(31, 30, 29, 0.6);
+}
+
+table thead tr:last-child {
+  border-bottom: 1px solid rgba(31, 30, 29, 0.6);
+}
+
+table tbody tr:last-child {
+  border-bottom: 1px solid rgba(31, 30, 29, 0.6);
 }
 
 /* =========================================================================
