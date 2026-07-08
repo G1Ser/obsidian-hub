@@ -59,6 +59,12 @@ const CALLOUT_ALIASES: Record<string, string> = {
 marked.use(markedKatex({ throwOnError: false }));
 marked.use(markedFootnote());
 
+/* ---- Remove YAML frontmatter ---- */
+const removeYamlFrontmatter = (md: string): string => {
+  // 只移除文档开头的 YAML frontmatter，不影响中间的 YAML 内容
+  return md.replace(/^---\s*\n([\s\S]*?)\n---\s*\n/, '');
+};
+
 /* ---- Obsidian syntax pre-processing ---- */
 
 const convertCallouts = (md: string): string => {
@@ -107,6 +113,7 @@ const convertCallouts = (md: string): string => {
 
 /* ---- Expand Markdown To Fit Obsidian ---- */
 const preprocessMarkdown = (md: string): string => {
+  md = removeYamlFrontmatter(md);
   md = convertCallouts(md);
   md = md.replace(/==([^=\n]+)==/g, '<mark>$1</mark>');
   md = md.replace(/(!?)\[\[([^\]]+)\]\]/g, (_: string, bang: string, raw: string) => {

@@ -3,6 +3,7 @@ tags:
   - style
   - test
 ---
+
 # Heading 1
 
 正文测试。
@@ -13,9 +14,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant m
 
 这是 **Bold**。
 
-这是 *Italic*。
+这是 _Italic_。
 
-这是 ***Bold Italic***。
+这是 _**Bold Italic**_。
 
 这是 ~~Strikethrough~~。
 
@@ -44,9 +45,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant m
 - Apple
 - Banana
 - Orange
-    - Orange 1
-    - Orange 2
-        - Orange 2-1
+  - Orange 1
+  - Orange 2
+    - Orange 2-1
 - Watermelon
 
 ---
@@ -56,9 +57,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant m
 1. 第一项
 2. 第二项
 3. 第三项
-    1. 子项
-    2. 子项
-        1. 更深一级
+   1. 子项
+   2. 子项
+      1. 更深一级
 
 ---
 
@@ -67,10 +68,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant m
 - [ ] 未完成
 - [x] 已完成
 - [ ] PDF 导出
-    - [x] Markdown
-    - [x] Code
-    - [x] Formula
-    - [ ] Mermaid
+  - [x] Markdown
+  - [x] Code
+  - [x] Formula
+  - [ ] Mermaid
 - [ ] 发布插件
 
 ---
@@ -81,9 +82,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant m
 >
 > 第二行
 >
->> 二级引用
->>
->>> 三级引用
+> > 二级引用
+> >
+> > > 三级引用
 
 ---
 
@@ -129,17 +130,17 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant m
 
 ```ts
 interface User {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 const user: User = {
-    id: 1,
-    name: "Claude"
+  id: 1,
+  name: 'Claude',
 };
 
 function hello(name: string) {
-    console.log(`Hello ${name}`);
+  console.log(`Hello ${name}`);
 }
 
 hello(user.name);
@@ -149,9 +150,9 @@ hello(user.name);
 
 ```json
 {
-    "name": "Claude PDF",
-    "version": "1.0.0",
-    "theme": "Minimal"
+  "name": "Claude PDF",
+  "version": "1.0.0",
+  "theme": "Minimal"
 }
 ```
 
@@ -159,12 +160,12 @@ hello(user.name);
 
 ```css
 body {
-    background: #faf9f5;
-    color: #141413;
+  background: #faf9f5;
+  color: #141413;
 }
 
 h1 {
-    font-size: 2rem;
+  font-size: 2rem;
 }
 ```
 
@@ -172,7 +173,7 @@ h1 {
 
 ```html
 <div class="card">
-    <h2>Hello</h2>
+  <h2>Hello</h2>
 </div>
 ```
 
@@ -197,10 +198,10 @@ pnpm test
 
 # Table
 
-| Name       | Language   | Stars |
-| ---------- | ---------- | ----: |
+| Name       | Language   |      Stars |
+| ---------- | ---------- | ---------: |
 | Obsidian   | TypeScript | ⭐⭐⭐⭐⭐ |
-| Claude PDF | TypeScript |  ⭐⭐⭐⭐ |
+| Claude PDF | TypeScript |   ⭐⭐⭐⭐ |
 | KaTeX      | JavaScript | ⭐⭐⭐⭐⭐ |
 
 ---
@@ -247,6 +248,7 @@ $$
 ---
 
 # Image
+
 ![V Image](https://picsum.photos/2000/200)
 ![V Image](https://picsum.photos/650/1000)
 
@@ -316,8 +318,8 @@ KaTeX
 > - [ ] Mermaid
 >
 > ```ts
-> export function add(a:number,b:number){
->     return a+b;
+> export function add(a: number, b: number) {
+>   return a + b;
 > }
 > ```
 >
@@ -344,7 +346,6 @@ B --> C[Playwright]
 
 C --> D[PDF]
 ```
-
 
 ---
 

@@ -178,8 +178,8 @@ body {
   };
 
   // src/utils/paged/rules/image.ts
-  var MIN_REMAINING_HEIGHT_FOR_SCALE = 350;
-  var MIN_SCALED_IMAGE_HEIGHT = 120;
+  var MIN_REMAINING_HEIGHT_FOR_SCALE = 500;
+  var MIN_SCALED_IMAGE_HEIGHT = 300;
   var IMAGE_HEIGHT_STEP = 24;
   var imageRule = {
     name: "image",
@@ -257,9 +257,7 @@ body {
   var fitImagesToHeight = (block, maxHeight) => {
     const images = block.tagName.toLowerCase() === "img" ? [block] : Array.from(block.querySelectorAll("img"));
     for (const img of images) {
-      img.style.width = "100%";
       img.style.maxHeight = `${maxHeight}px`;
-      img.style.objectFit = "contain";
     }
   };
   var getCurrentPageRemainingHeight = (layout) => {

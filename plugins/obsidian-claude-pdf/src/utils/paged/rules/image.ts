@@ -1,8 +1,8 @@
 import type { PaginationRule } from '.';
 import type { PageLayout } from '../types';
 
-const MIN_REMAINING_HEIGHT_FOR_SCALE = 350;
-const MIN_SCALED_IMAGE_HEIGHT = 120;
+const MIN_REMAINING_HEIGHT_FOR_SCALE = 500;
+const MIN_SCALED_IMAGE_HEIGHT = 300;
 const IMAGE_HEIGHT_STEP = 24;
 
 export const imageRule: PaginationRule = {
@@ -115,9 +115,7 @@ const fitImagesToHeight = (block: HTMLElement, maxHeight: number) => {
       : Array.from(block.querySelectorAll('img'));
 
   for (const img of images) {
-    img.style.width = '100%';
     img.style.maxHeight = `${maxHeight}px`;
-    img.style.objectFit = 'contain';
   }
 };
 
